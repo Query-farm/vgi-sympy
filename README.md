@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="docs/vgi-logo.png" alt="Vector Gateway Interface (VGI)" width="320">
+</p>
+
+<p align="center"><em>A <a href="https://query.farm">Query.Farm</a> VGI worker for DuckDB.</em></p>
+
 # vgi-sympy
 
 [![CI](https://github.com/Query-farm/vgi-sympy/actions/workflows/ci.yml/badge.svg)](https://github.com/Query-farm/vgi-sympy/actions/workflows/ci.yml)
@@ -147,3 +153,12 @@ runs the `test/sql/*.test` files via
 
 MIT — see [LICENSE](LICENSE). SymPy is BSD-3-Clause; `vgi-python` is licensed
 separately by Query Farm.
+
+---
+
+## Authorship & License
+
+Written by [Query.Farm](https://query.farm) — every VGI worker is designed and built by Query.Farm.
+
+Copyright 2026 Query Farm LLC - https://query.farm
+
