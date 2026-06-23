@@ -125,4 +125,7 @@ jobs:
         run: uv run ruff check .
 
       - name: Type check (mypy)
-        run: uv run mypy vgi_sympy/
+        run: uv run mypy vgi_sympy/ sympy_worker.py
+
+      - name: Docstring lint (pydoclint)
+        run: uv run pydoclint vgi_sympy/ sympy_worker.py

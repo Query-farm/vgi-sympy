@@ -351,7 +351,7 @@ def evaluate(expr: str, vars_json: str) -> float | None:
 def to_latex(expr: str) -> str | None:
     """LaTeX rendering of ``expr``, or ``None`` on failure."""
     try:
-        return sympy.latex(parse(expr))
+        return str(sympy.latex(parse(expr)))
     except Exception:  # noqa: BLE001
         return None
 

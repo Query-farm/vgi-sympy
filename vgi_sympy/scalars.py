@@ -54,25 +54,19 @@ def _map_str2(a: pa.StringArray, b: pa.StringArray, fn: Callable[[str, str], str
     return pa.array(out, type=pa.string())
 
 
-def _map_bool2(
-    a: pa.StringArray, b: pa.StringArray, fn: Callable[[str, str], bool | None]
-) -> pa.BooleanArray:
+def _map_bool2(a: pa.StringArray, b: pa.StringArray, fn: Callable[[str, str], bool | None]) -> pa.BooleanArray:
     xs, ys = a.to_pylist(), b.to_pylist()
     out = [None if x is None or y is None else fn(x, y) for x, y in zip(xs, ys, strict=True)]
     return pa.array(out, type=pa.bool_())
 
 
-def _map_double2(
-    a: pa.StringArray, b: pa.StringArray, fn: Callable[[str, str], float | None]
-) -> pa.DoubleArray:
+def _map_double2(a: pa.StringArray, b: pa.StringArray, fn: Callable[[str, str], float | None]) -> pa.DoubleArray:
     xs, ys = a.to_pylist(), b.to_pylist()
     out = [None if x is None or y is None else fn(x, y) for x, y in zip(xs, ys, strict=True)]
     return pa.array(out, type=pa.float64())
 
 
-def _map_list_str(
-    arr: pa.StringArray, b: pa.StringArray, fn: Callable[[str, str], list[str] | None]
-) -> pa.ListArray:
+def _map_list_str(arr: pa.StringArray, b: pa.StringArray, fn: Callable[[str, str], list[str] | None]) -> pa.ListArray:
     xs, ys = arr.to_pylist(), b.to_pylist()
     out = [None if x is None or y is None else fn(x, y) for x, y in zip(xs, ys, strict=True)]
     return pa.array(out, type=pa.list_(pa.string()))
@@ -87,6 +81,8 @@ class SimplifyFunction(ScalarFunction):
     """``simplify(expr)`` -- simplified canonical form, or NULL if invalid."""
 
     class Meta:
+        """VGI function metadata (name, description, categories, examples)."""
+
         name = "simplify"
         description = "Algebraically simplified form of an expression, or NULL if invalid/unsafe"
         categories = ["sympy", "cas"]
@@ -101,6 +97,7 @@ class SimplifyFunction(ScalarFunction):
     def compute(
         cls, expr: Annotated[pa.StringArray, Param(doc="Expression to simplify.")]
     ) -> Annotated[pa.StringArray, Returns()]:
+        """Map the pure CAS function over the Arrow input array(s)."""
         return _map_str(expr, cas.simplify)
 
 
@@ -108,6 +105,8 @@ class ExpandFunction(ScalarFunction):
     """``expand(expr)`` -- algebraically expanded form, or NULL if invalid."""
 
     class Meta:
+        """VGI function metadata (name, description, categories, examples)."""
+
         name = "expand"
         description = "Algebraically expanded form of an expression, or NULL if invalid/unsafe"
         categories = ["sympy", "cas"]
@@ -122,6 +121,7 @@ class ExpandFunction(ScalarFunction):
     def compute(
         cls, expr: Annotated[pa.StringArray, Param(doc="Expression to expand.")]
     ) -> Annotated[pa.StringArray, Returns()]:
+        """Map the pure CAS function over the Arrow input array(s)."""
         return _map_str(expr, cas.expand)
 
 
@@ -129,6 +129,8 @@ class FactorFunction(ScalarFunction):
     """``factor(expr)`` -- factored form, or NULL if invalid."""
 
     class Meta:
+        """VGI function metadata (name, description, categories, examples)."""
+
         name = "factor"
         description = "Factored form of an expression, e.g. '(x - 1)*(x + 1)', or NULL if invalid"
         categories = ["sympy", "cas"]
@@ -143,6 +145,7 @@ class FactorFunction(ScalarFunction):
     def compute(
         cls, expr: Annotated[pa.StringArray, Param(doc="Expression to factor.")]
     ) -> Annotated[pa.StringArray, Returns()]:
+        """Map the pure CAS function over the Arrow input array(s)."""
         return _map_str(expr, cas.factor)
 
 
@@ -150,6 +153,8 @@ class ToLatexFunction(ScalarFunction):
     """``to_latex(expr)`` -- LaTeX rendering, or NULL if invalid."""
 
     class Meta:
+        """VGI function metadata (name, description, categories, examples)."""
+
         name = "to_latex"
         description = "LaTeX rendering of an expression, or NULL if invalid/unsafe"
         categories = ["sympy", "cas"]
@@ -164,6 +169,7 @@ class ToLatexFunction(ScalarFunction):
     def compute(
         cls, expr: Annotated[pa.StringArray, Param(doc="Expression to render.")]
     ) -> Annotated[pa.StringArray, Returns()]:
+        """Map the pure CAS function over the Arrow input array(s)."""
         return _map_str(expr, cas.to_latex)
 
 
@@ -176,6 +182,8 @@ class DifferentiateFunction(ScalarFunction):
     """``differentiate(expr, var)`` -- derivative w.r.t. ``var``, or NULL."""
 
     class Meta:
+        """VGI function metadata (name, description, categories, examples)."""
+
         name = "differentiate"
         description = "Derivative of an expression with respect to a variable, or NULL if invalid"
         categories = ["sympy", "cas", "calculus"]
@@ -192,6 +200,7 @@ class DifferentiateFunction(ScalarFunction):
         expr: Annotated[pa.StringArray, Param(doc="Expression to differentiate.")],
         var: Annotated[pa.StringArray, Param(doc="Variable name to differentiate by.")],
     ) -> Annotated[pa.StringArray, Returns()]:
+        """Map the pure CAS function over the Arrow input array(s)."""
         return _map_str2(expr, var, cas.differentiate)
 
 
@@ -199,6 +208,8 @@ class IntegrateFunction(ScalarFunction):
     """``integrate(expr, var)`` -- indefinite integral (no +C), or NULL."""
 
     class Meta:
+        """VGI function metadata (name, description, categories, examples)."""
+
         name = "integrate"
         description = (
             "Indefinite integral of an expression w.r.t. a variable (no +C), "
@@ -218,6 +229,7 @@ class IntegrateFunction(ScalarFunction):
         expr: Annotated[pa.StringArray, Param(doc="Expression to integrate.")],
         var: Annotated[pa.StringArray, Param(doc="Variable name to integrate by.")],
     ) -> Annotated[pa.StringArray, Returns()]:
+        """Map the pure CAS function over the Arrow input array(s)."""
         return _map_str2(expr, var, cas.integrate)
 
 
@@ -230,6 +242,8 @@ class SolveFunction(ScalarFunction):
     """``solve(equation, var)`` -- solutions for ``var`` as a VARCHAR[]."""
 
     class Meta:
+        """VGI function metadata (name, description, categories, examples)."""
+
         name = "solve"
         description = (
             "Solve an equation for a variable, returning solutions as VARCHAR[]. "
@@ -254,6 +268,7 @@ class SolveFunction(ScalarFunction):
         equation: Annotated[pa.StringArray, Param(doc="Equation or expression to solve.")],
         var: Annotated[pa.StringArray, Param(doc="Variable name to solve for.")],
     ) -> Annotated[pa.ListArray, Returns(arrow_type=pa.list_(pa.string()))]:
+        """Map the pure CAS function over the Arrow input array(s)."""
         return _map_list_str(equation, var, cas.solve)
 
 
@@ -266,6 +281,8 @@ class EvaluateFunction(ScalarFunction):
     """``evaluate(expr, vars_json)`` -- numeric value of ``expr`` as DOUBLE."""
 
     class Meta:
+        """VGI function metadata (name, description, categories, examples)."""
+
         name = "evaluate"
         description = (
             'Substitute numeric values from a JSON object like \'{"x":2,"y":3}\' '
@@ -286,6 +303,7 @@ class EvaluateFunction(ScalarFunction):
         expr: Annotated[pa.StringArray, Param(doc="Expression to evaluate.")],
         vars_json: Annotated[pa.StringArray, Param(doc='JSON object of variable values, e.g. {"x":2}.')],
     ) -> Annotated[pa.DoubleArray, Returns()]:
+        """Map the pure CAS function over the Arrow input array(s)."""
         return _map_double2(expr, vars_json, cas.evaluate)
 
 
@@ -298,10 +316,11 @@ class SymbolicEqualFunction(ScalarFunction):
     """``symbolic_equal(a, b)`` -- True if symbolically equivalent."""
 
     class Meta:
+        """VGI function metadata (name, description, categories, examples)."""
+
         name = "symbolic_equal"
         description = (
-            "True if two expressions are symbolically equivalent (simplify(a-b)==0), "
-            "or NULL if either is invalid"
+            "True if two expressions are symbolically equivalent (simplify(a-b)==0), or NULL if either is invalid"
         )
         categories = ["sympy", "cas"]
         examples = [
@@ -317,6 +336,7 @@ class SymbolicEqualFunction(ScalarFunction):
         a: Annotated[pa.StringArray, Param(doc="First expression.")],
         b: Annotated[pa.StringArray, Param(doc="Second expression.")],
     ) -> Annotated[pa.BooleanArray, Returns()]:
+        """Map the pure CAS function over the Arrow input array(s)."""
         return _map_bool2(a, b, cas.symbolic_equal)
 
 
@@ -329,6 +349,8 @@ class SympyVersionFunction(ScalarFunction):
     """``sympy_version()`` -- the backing SymPy version string."""
 
     class Meta:
+        """VGI function metadata (name, description, categories, examples)."""
+
         name = "sympy_version"
         description = "The SymPy version string backing this worker"
         categories = ["sympy"]
@@ -343,6 +365,7 @@ class SympyVersionFunction(ScalarFunction):
     def compute(
         cls, n: Annotated[pa.Int64Array, Param(doc="Row driver (value ignored).")]
     ) -> Annotated[pa.StringArray, Returns()]:
+        """Map the pure CAS function over the Arrow input array(s)."""
         version = cas.sympy_version()
         return pa.array([None if x is None else version for x in n.to_pylist()], type=pa.string())
 
