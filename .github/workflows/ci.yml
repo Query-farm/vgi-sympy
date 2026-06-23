@@ -128,4 +128,4 @@ jobs:
         run: uv run mypy vgi_sympy/ sympy_worker.py
 
       - name: Docstring lint (pydoclint)
-        run: uv run pydoclint vgi_sympy/ sympy_worker.py
+        run: uvx pydoclint --config pyproject.toml vgi_sympy/ sympy_worker.py
