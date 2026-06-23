@@ -4,7 +4,9 @@
 
 <p align="center"><em>A <a href="https://query.farm">Query.Farm</a> VGI worker for DuckDB.</em></p>
 
-# vgi-sympy
+# Symbolic Math & CAS — Simplify, Solve, Differentiate & Integrate in DuckDB
+
+> **vgi-sympy** · a [Query.Farm](https://query.farm) VGI worker · powered by SymPy
 
 [![CI](https://github.com/Query-farm/vgi-sympy/actions/workflows/ci.yml/badge.svg)](https://github.com/Query-farm/vgi-sympy/actions/workflows/ci.yml)
 
