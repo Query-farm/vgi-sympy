@@ -1,0 +1,104 @@
+# name: test/sql/cas.test
+# description: Symbolic math scalar functions -- simplify, calculus, solve, evaluate, equality
+# group: [vgi_sympy]
+
+require-env VGI_SYMPY_WORKER
+
+statement ok
+LOAD vgi;
+
+statement ok
+ATTACH 'sympy' AS sympy (TYPE vgi, LOCATION '${VGI_SYMPY_WORKER}');
+
+# --- simplify -------------------------------------------------------------
+query I
+SELECT sympy.simplify('sin(x)**2 + cos(x)**2');
+----
+1
+
+# NULL input -> NULL output.
+query I
+SELECT sympy.simplify(NULL) IS NULL;
+----
+true
+
+# Invalid/garbage expression -> NULL (not an error) for transforms.
+query I
+SELECT sympy.simplify('x +* /') IS NULL;
+----
+true
+
+# --- expand / factor ------------------------------------------------------
+query I
+SELECT sympy.expand('(x + 1)**2');
+----
+x**2 + 2*x + 1
+
+query I
+SELECT sympy.factor('x**2 - 1');
+----
+(x - 1)*(x + 1)
+
+# --- differentiate / integrate -------------------------------------------
+query I
+SELECT sympy.differentiate('x**3', 'x');
+----
+3*x**2
+
+query I
+SELECT sympy.integrate('2*x', 'x');
+----
+x**2
+
+# --- solve via UNNEST (order-insensitive) --------------------------------
+query I rowsort
+SELECT UNNEST(sympy.solve('x**2 - 4', 'x'));
+----
+-2
+2
+
+query I
+SELECT UNNEST(sympy.solve('2*x = 10', 'x'));
+----
+5
+
+# --- evaluate -------------------------------------------------------------
+query I
+SELECT sympy.evaluate('x**2 + y', '{"x":3,"y":1}');
+----
+10.0
+
+# Free symbol remaining -> NULL.
+query I
+SELECT sympy.evaluate('x**2 + y', '{"x":3}') IS NULL;
+----
+true
+
+# --- symbolic_equal -------------------------------------------------------
+query I
+SELECT sympy.symbolic_equal('2*(x+1)', '2*x+2');
+----
+true
+
+query I
+SELECT sympy.symbolic_equal('x+1', 'x+2');
+----
+false
+
+# --- to_latex -------------------------------------------------------------
+query I
+SELECT sympy.to_latex('x**2');
+----
+x^{2}
+
+# --- per-row use over a small VALUES table -------------------------------
+query II rowsort
+SELECT e, sympy.simplify(e)
+FROM (VALUES ('x + x'), ('2*x - x'), ('0*y')) AS t(e);
+----
+0*y	0
+2*x - x	x
+x + x	2*x
+
+statement ok
+DETACH sympy;

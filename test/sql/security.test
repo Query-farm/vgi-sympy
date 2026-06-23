@@ -1,0 +1,37 @@
+# name: test/sql/security.test
+# description: Safe parsing -- hostile/garbage expressions are rejected, never executed
+# group: [vgi_sympy]
+
+require-env VGI_SYMPY_WORKER
+
+statement ok
+LOAD vgi;
+
+statement ok
+ATTACH 'sympy' AS sympy (TYPE vgi, LOCATION '${VGI_SYMPY_WORKER}');
+
+# A code-execution attempt must NOT run a shell; it yields NULL (inert symbol or
+# rejected parse) -- never arbitrary Python.
+query I
+SELECT sympy.simplify('__import__(''os'').system(''echo pwned'')') IS NULL;
+----
+true
+
+# The classic sandbox-escape gadget must be rejected outright.
+query I
+SELECT sympy.simplify('().__class__.__bases__[0].__subclasses__()') IS NULL;
+----
+true
+
+# evaluate() with non-JSON vars is a clear error, not code execution.
+statement error
+SELECT sympy.evaluate('x', 'not json at all');
+----
+
+# evaluate() with a non-numeric value is a clear error.
+statement error
+SELECT sympy.evaluate('x', '{"x": "abc"}');
+----
+
+statement ok
+DETACH sympy;
