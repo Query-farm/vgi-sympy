@@ -30,7 +30,7 @@ SELECT UNNEST(sympy.solve('2*x = 10', 'x'));         -- 5
 SELECT sympy.evaluate('x**2 + y', '{"x":3,"y":1}');  -- 10.0
 SELECT sympy.to_latex('x**2');                       -- 'x^{2}'
 SELECT sympy.symbolic_equal('2*(x+1)', '2*x+2');     -- true
-SELECT sympy.sympy_version();                        -- e.g. '1.13.3'
+SELECT sympy.sympy_version(1);                       -- e.g. '1.13.3'
 ```
 
 Everything runs **offline and deterministically** — there is no network access,
