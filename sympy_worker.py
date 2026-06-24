@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
-#     "vgi-python[http]>=0.8.3",
+#     "vgi-python[http]>=0.8.4",
 #     "sympy>=1.13",
 # ]
 # ///
@@ -45,13 +45,62 @@ from vgi_sympy.scalars import SCALAR_FUNCTIONS
 
 _FUNCTIONS: list[type] = [*SCALAR_FUNCTIONS]
 
+_DESCRIPTION_LLM = (
+    "Symbolic math (a computer algebra system) over SymPy, exposed as DuckDB scalar functions. "
+    "Algebraically simplify, expand, or factor an expression; differentiate or integrate it with "
+    "respect to a variable; solve an equation for a variable (returning a VARCHAR[] of solutions); "
+    "substitute numeric values and evaluate to a DOUBLE; render to LaTeX; and test whether two "
+    "expressions are symbolically equivalent. Expressions are plain strings (e.g. 'x**2 + 2*x + 1', "
+    "'sin(x)**2 + cos(x)**2'); untrusted input is parsed through a hardened allow-list parser, never "
+    "eval/sympify. Use for symbolic algebra and calculus inside SQL."
+)
+
+_DESCRIPTION_MD = (
+    "# sympy\n\n"
+    "Symbolic math (a small CAS) over [SymPy](https://www.sympy.org/), as DuckDB scalar functions.\n\n"
+    "Scalars: `simplify`, `expand`, `factor`, `to_latex`, `differentiate`, `integrate`, `solve`, "
+    "`evaluate`, `symbolic_equal`, `sympy_version`.\n\n"
+    "```sql\n"
+    "SELECT sympy.simplify('sin(x)**2 + cos(x)**2');  -- '1'\n"
+    "SELECT sympy.factor('x**2 - 1');                 -- '(x - 1)*(x + 1)'\n"
+    "SELECT sympy.solve('x**2 - 4', 'x');             -- ['-2', '2']\n"
+    "SELECT sympy.integrate('2*x', 'x');              -- 'x**2'\n"
+    "```\n"
+)
+
+_CATALOG_TAGS = {
+    "vgi.description_llm": _DESCRIPTION_LLM,
+    "vgi.description_md": _DESCRIPTION_MD,
+    "vgi.author": "Query.Farm",
+    "vgi.copyright": "Copyright 2026 Query Farm LLC - https://query.farm",
+    "vgi.license": "MIT",
+    "vgi.support_contact": "https://github.com/Query-farm/vgi-sympy/issues",
+    "vgi.support_policy_url": "https://github.com/Query-farm/vgi-sympy/blob/main/README.md",
+}
+
+_SCHEMA_TAGS = {
+    "vgi.description_llm": (
+        "Computer-algebra scalar functions over SymPy: simplify, expand, factor, differentiate, "
+        "integrate, solve, evaluate, to_latex, and symbolic_equal. Inputs are expression strings; "
+        "transforms return NULL for invalid/unsafe input so they compose over messy columns."
+    ),
+    "vgi.description_md": (
+        "Symbolic-math (CAS) scalar functions over SymPy: simplify/expand/factor, "
+        "differentiate/integrate, solve, evaluate, to_latex, and symbolic_equal."
+    ),
+}
+
 _SYMPY_CATALOG = Catalog(
     name="sympy",
     default_schema="main",
+    comment="Symbolic math (CAS): simplify/solve/differentiate/integrate/factor for SQL via SymPy.",
+    tags=_CATALOG_TAGS,
+    source_url="https://github.com/Query-farm/vgi-sympy",
     schemas=[
         Schema(
             name="main",
             comment="Symbolic math (CAS): simplify/solve/differentiate/integrate/factor for SQL",
+            tags=_SCHEMA_TAGS,
             functions=list(_FUNCTIONS),
         ),
     ],
