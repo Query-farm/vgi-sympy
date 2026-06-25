@@ -28,6 +28,7 @@ ignored row-driver argument and always returns the version string.
 
 from __future__ import annotations
 
+import json
 from collections.abc import Callable
 from typing import Annotated
 
@@ -37,8 +38,6 @@ from vgi.metadata import FunctionExample
 from vgi.scalar_function import ScalarFunction
 
 from . import cas
-
-_SOURCE_URL = "https://github.com/Query-farm/vgi-sympy/blob/main/vgi_sympy/scalars.py"
 
 # ---------------------------------------------------------------------------
 # Small mapping helpers: apply a pure function across an array, NULL -> NULL.
@@ -90,8 +89,9 @@ class SimplifyFunction(ScalarFunction):
         categories = ["sympy", "cas"]
         tags = {
             "vgi.title": "Simplify Symbolic Expression",
-            "vgi.keywords": "simplify, reduce, canonical form, normalize, sympy, cas, algebra, trig identity",
-            "vgi.source_url": _SOURCE_URL,
+            "vgi.keywords": json.dumps(
+                ["simplify", "reduce", "canonical form", "normalize", "sympy", "cas", "algebra", "trig identity"]
+            ),
             "vgi.doc_llm": (
                 "## simplify(expr)\n\n"
                 "Apply SymPy's general-purpose algebraic **simplification** to a single expression "
@@ -141,8 +141,9 @@ class ExpandFunction(ScalarFunction):
         categories = ["sympy", "cas"]
         tags = {
             "vgi.title": "Expand Symbolic Expression",
-            "vgi.keywords": "expand, multiply out, distribute, binomial, polynomial, foil, sympy, cas, algebra",
-            "vgi.source_url": _SOURCE_URL,
+            "vgi.keywords": json.dumps(
+                ["expand", "multiply out", "distribute", "binomial", "polynomial", "foil", "sympy", "cas", "algebra"]
+            ),
             "vgi.doc_llm": (
                 "## expand(expr)\n\n"
                 "Algebraically **expand** an expression — multiply out products and powers — and "
@@ -190,8 +191,9 @@ class FactorFunction(ScalarFunction):
         categories = ["sympy", "cas"]
         tags = {
             "vgi.title": "Factor Symbolic Expression",
-            "vgi.keywords": "factor, factorize, factorise, roots, divisors, polynomial, sympy, cas, algebra",
-            "vgi.source_url": _SOURCE_URL,
+            "vgi.keywords": json.dumps(
+                ["factor", "factorize", "factorise", "roots", "divisors", "polynomial", "sympy", "cas", "algebra"]
+            ),
             "vgi.doc_llm": (
                 "## factor(expr)\n\n"
                 "**Factor** an expression into a product of irreducible factors over the rationals and "
@@ -242,8 +244,9 @@ class ToLatexFunction(ScalarFunction):
         categories = ["sympy", "cas"]
         tags = {
             "vgi.title": "Render Expression To LaTeX",
-            "vgi.keywords": "latex, tex, render, typeset, mathjax, format, pretty print, sympy, cas",
-            "vgi.source_url": _SOURCE_URL,
+            "vgi.keywords": json.dumps(
+                ["latex", "tex", "render", "typeset", "mathjax", "format", "pretty print", "sympy", "cas"]
+            ),
             "vgi.doc_llm": (
                 "## to_latex(expr)\n\n"
                 "Render an expression as a **LaTeX** string (`VARCHAR`) suitable for typesetting in "
@@ -298,8 +301,19 @@ class DifferentiateFunction(ScalarFunction):
         categories = ["sympy", "cas", "calculus"]
         tags = {
             "vgi.title": "Differentiate Expression By Variable",
-            "vgi.keywords": "differentiate, derivative, calculus, gradient, slope, rate of change, diff, sympy, cas",
-            "vgi.source_url": _SOURCE_URL,
+            "vgi.keywords": json.dumps(
+                [
+                    "differentiate",
+                    "derivative",
+                    "calculus",
+                    "gradient",
+                    "slope",
+                    "rate of change",
+                    "diff",
+                    "sympy",
+                    "cas",
+                ]
+            ),
             "vgi.doc_llm": (
                 "## differentiate(expr, var)\n\n"
                 "Compute the symbolic **derivative** of an expression with respect to a named "
@@ -354,8 +368,9 @@ class IntegrateFunction(ScalarFunction):
         categories = ["sympy", "cas", "calculus"]
         tags = {
             "vgi.title": "Integrate Expression By Variable",
-            "vgi.keywords": "integrate, integral, antiderivative, calculus, area, accumulate, sympy, cas",
-            "vgi.source_url": _SOURCE_URL,
+            "vgi.keywords": json.dumps(
+                ["integrate", "integral", "antiderivative", "calculus", "area", "accumulate", "sympy", "cas"]
+            ),
             "vgi.doc_llm": (
                 "## integrate(expr, var)\n\n"
                 "Compute the symbolic **indefinite integral** (antiderivative) of an expression with "
@@ -418,8 +433,9 @@ class SolveFunction(ScalarFunction):
         categories = ["sympy", "cas", "solve"]
         tags = {
             "vgi.title": "Solve Equation For Variable",
-            "vgi.keywords": "solve, equation, roots, zeros, solver, algebra, unknown, sympy, cas",
-            "vgi.source_url": _SOURCE_URL,
+            "vgi.keywords": json.dumps(
+                ["solve", "equation", "roots", "zeros", "solver", "algebra", "unknown", "sympy", "cas"]
+            ),
             "vgi.doc_llm": (
                 "## solve(equation, var)\n\n"
                 "**Solve** an equation for a variable and return all solutions as a `VARCHAR[]` "
@@ -485,8 +501,9 @@ class EvaluateFunction(ScalarFunction):
         categories = ["sympy", "cas", "evaluate"]
         tags = {
             "vgi.title": "Evaluate Expression Numerically",
-            "vgi.keywords": "evaluate, eval, substitute, numeric, compute, plug in, value, double, sympy, cas",
-            "vgi.source_url": _SOURCE_URL,
+            "vgi.keywords": json.dumps(
+                ["evaluate", "eval", "substitute", "numeric", "compute", "plug in", "value", "double", "sympy", "cas"]
+            ),
             "vgi.doc_llm": (
                 "## evaluate(expr, vars_json)\n\n"
                 "Substitute numeric values into an expression and **evaluate** it to a `DOUBLE`.\n\n"
@@ -546,8 +563,9 @@ class SymbolicEqualFunction(ScalarFunction):
         categories = ["sympy", "cas"]
         tags = {
             "vgi.title": "Test Symbolic Equality",
-            "vgi.keywords": "symbolic equal, equivalent, equality, compare, identity, same, sympy, cas, algebra",
-            "vgi.source_url": _SOURCE_URL,
+            "vgi.keywords": json.dumps(
+                ["symbolic equal", "equivalent", "equality", "compare", "identity", "same", "sympy", "cas", "algebra"]
+            ),
             "vgi.doc_llm": (
                 "## symbolic_equal(a, b)\n\n"
                 "Test whether two expressions are **symbolically equivalent** and return a `BOOLEAN`.\n\n"
@@ -604,8 +622,9 @@ class SympyVersionFunction(ScalarFunction):
         categories = ["sympy"]
         tags = {
             "vgi.title": "Report Backing SymPy Version",
-            "vgi.keywords": "version, sympy version, build, capability, diagnostics, about, sympy, cas",
-            "vgi.source_url": _SOURCE_URL,
+            "vgi.keywords": json.dumps(
+                ["version", "sympy version", "build", "capability", "diagnostics", "about", "sympy", "cas"]
+            ),
             "vgi.doc_llm": (
                 "## sympy_version(row_driver)\n\n"
                 "Report the **SymPy version string** that backs this worker (e.g. `'1.13.3'`), "

@@ -47,8 +47,6 @@ from vgi_sympy.scalars import SCALAR_FUNCTIONS
 
 _FUNCTIONS: list[type] = [*SCALAR_FUNCTIONS]
 
-_SOURCE_BASE = "https://github.com/Query-farm/vgi-sympy/blob/main"
-
 _DESCRIPTION_LLM = (
     "Symbolic math (a computer algebra system) over [SymPy](https://www.sympy.org/), exposed as "
     "DuckDB scalar functions.\n\n"
@@ -92,10 +90,27 @@ _DESCRIPTION_MD = (
     "any evaluation happens.\n"
 )
 
-_KEYWORDS = (
-    "sympy, symbolic math, computer algebra, cas, simplify, expand, factor, differentiate, "
-    "derivative, integrate, integral, solve, equation, evaluate, latex, symbolic equality, algebra, "
-    "calculus"
+_KEYWORDS = json.dumps(
+    [
+        "sympy",
+        "symbolic math",
+        "computer algebra",
+        "cas",
+        "simplify",
+        "expand",
+        "factor",
+        "differentiate",
+        "derivative",
+        "integrate",
+        "integral",
+        "solve",
+        "equation",
+        "evaluate",
+        "latex",
+        "symbolic equality",
+        "algebra",
+        "calculus",
+    ]
 )
 
 _CATALOG_TAGS = {
@@ -153,7 +168,6 @@ _EXAMPLE_QUERIES = (
 _SCHEMA_TAGS = {
     "vgi.title": "SymPy CAS — main schema",
     "vgi.keywords": _KEYWORDS,
-    "vgi.source_url": f"{_SOURCE_BASE}/vgi_sympy/scalars.py",
     # VGI123 classifying tags use BARE keys (not vgi.-namespaced).
     "domain": "mathematics",
     "category": "computer-algebra",
