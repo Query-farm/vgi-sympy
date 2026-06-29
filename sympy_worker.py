@@ -69,6 +69,7 @@ _DESCRIPTION_LLM = (
 
 _DESCRIPTION_MD = (
     "# SymPy Symbolic Math (CAS) for DuckDB\n\n"
+    "![SymPy logo](https://www.sympy.org/static/images/logo.png)\n\n"
     "**Do computer algebra in SQL** — simplify, expand, factor, differentiate, integrate, and solve "
     "symbolic expressions stored as text columns, powered by the "
     "[SymPy](https://www.sympy.org/) computer algebra system and exposed as DuckDB scalar functions.\n\n"
