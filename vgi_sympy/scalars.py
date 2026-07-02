@@ -89,6 +89,7 @@ class SimplifyFunction(ScalarFunction):
         categories = ["sympy", "cas"]
         tags = {
             "vgi.title": "Simplify Symbolic Expression",
+            "vgi.category": "transforms",
             "vgi.keywords": json.dumps(
                 ["simplify", "reduce", "canonical form", "normalize", "sympy", "cas", "algebra", "trig identity"]
             ),
@@ -141,6 +142,7 @@ class ExpandFunction(ScalarFunction):
         categories = ["sympy", "cas"]
         tags = {
             "vgi.title": "Expand Symbolic Expression",
+            "vgi.category": "transforms",
             "vgi.keywords": json.dumps(
                 ["expand", "multiply out", "distribute", "binomial", "polynomial", "foil", "sympy", "cas", "algebra"]
             ),
@@ -191,6 +193,7 @@ class FactorFunction(ScalarFunction):
         categories = ["sympy", "cas"]
         tags = {
             "vgi.title": "Factor Symbolic Expression",
+            "vgi.category": "transforms",
             "vgi.keywords": json.dumps(
                 ["factor", "factorize", "factorise", "roots", "divisors", "polynomial", "sympy", "cas", "algebra"]
             ),
@@ -244,6 +247,7 @@ class ToLatexFunction(ScalarFunction):
         categories = ["sympy", "cas"]
         tags = {
             "vgi.title": "Render Expression To LaTeX",
+            "vgi.category": "transforms",
             "vgi.keywords": json.dumps(
                 ["latex", "tex", "render", "typeset", "mathjax", "format", "pretty print", "sympy", "cas"]
             ),
@@ -301,6 +305,7 @@ class DifferentiateFunction(ScalarFunction):
         categories = ["sympy", "cas", "calculus"]
         tags = {
             "vgi.title": "Differentiate Expression By Variable",
+            "vgi.category": "calculus",
             "vgi.keywords": json.dumps(
                 [
                     "differentiate",
@@ -368,6 +373,7 @@ class IntegrateFunction(ScalarFunction):
         categories = ["sympy", "cas", "calculus"]
         tags = {
             "vgi.title": "Integrate Expression By Variable",
+            "vgi.category": "calculus",
             "vgi.keywords": json.dumps(
                 ["integrate", "integral", "antiderivative", "calculus", "area", "accumulate", "sympy", "cas"]
             ),
@@ -433,6 +439,7 @@ class SolveFunction(ScalarFunction):
         categories = ["sympy", "cas", "solve"]
         tags = {
             "vgi.title": "Solve Equation For Variable",
+            "vgi.category": "equations",
             "vgi.keywords": json.dumps(
                 ["solve", "equation", "roots", "zeros", "solver", "algebra", "unknown", "sympy", "cas"]
             ),
@@ -501,6 +508,7 @@ class EvaluateFunction(ScalarFunction):
         categories = ["sympy", "cas", "evaluate"]
         tags = {
             "vgi.title": "Evaluate Expression Numerically",
+            "vgi.category": "numeric",
             "vgi.keywords": json.dumps(
                 ["evaluate", "eval", "substitute", "numeric", "compute", "plug in", "value", "double", "sympy", "cas"]
             ),
@@ -563,6 +571,7 @@ class SymbolicEqualFunction(ScalarFunction):
         categories = ["sympy", "cas"]
         tags = {
             "vgi.title": "Test Symbolic Equality",
+            "vgi.category": "equations",
             "vgi.keywords": json.dumps(
                 ["symbolic equal", "equivalent", "equality", "compare", "identity", "same", "sympy", "cas", "algebra"]
             ),
@@ -622,6 +631,7 @@ class SympyVersionFunction(ScalarFunction):
         categories = ["sympy"]
         tags = {
             "vgi.title": "Report Backing SymPy Version",
+            "vgi.category": "diagnostics",
             "vgi.keywords": json.dumps(
                 ["version", "sympy version", "build", "capability", "diagnostics", "about", "sympy", "cas"]
             ),

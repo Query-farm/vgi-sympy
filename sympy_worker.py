@@ -90,20 +90,18 @@ _DESCRIPTION_MD = (
     "`__builtins__`), so a malformed or hostile string is rejected or returns `NULL`, never executed. "
     "SymPy itself produces a canonical string form for results, which is why outputs are reproducible "
     "and worth pinning in tests.\n\n"
-    "## SQL use cases & functions\n\n"
-    "Reach for this catalog to canonicalize free-form formula columns, check student answers, derive "
-    "derivatives and antiderivatives, or solve equations row by row. The function surface is: "
-    "`simplify`, `expand`, `factor`, and `to_latex` (algebraic transforms and LaTeX rendering); "
-    "`differentiate` and `integrate` (calculus with respect to a variable); `solve` and "
-    "`symbolic_equal` (equation solving — returning a `VARCHAR[]` of roots — and symbolic equality "
-    "testing); `evaluate` (substitute numeric values and return a `DOUBLE`); and `sympy_version` "
-    "(report the underlying SymPy version).\n\n"
+    "## When to use it\n\n"
+    "Reach for this catalog whenever a value in your data is a *formula* rather than a number and you "
+    "need to reason about it: canonicalize free-form formula columns so equivalent inputs collapse to "
+    "one representation, grade student or model answers against a key, derive derivatives and "
+    "antiderivatives for a scientific pipeline, solve equations row by row, or render expressions for "
+    "display. Because every transform is a per-row scalar that yields `NULL` on invalid or unsafe "
+    "input (rather than aborting the scan), it drops into an ordinary projection or predicate and "
+    "composes over messy, semi-structured text without special-casing. List the schema to discover "
+    "the individual algebra, calculus, equation, and rendering operations it provides.\n\n"
     "```sql\n"
     "SELECT sympy.simplify('sin(x)**2 + cos(x)**2');  -- '1'\n"
-    "SELECT sympy.factor('x**2 - 1');                 -- '(x - 1)*(x + 1)'\n"
     "SELECT sympy.differentiate('x**3', 'x');         -- '3*x**2'\n"
-    "SELECT sympy.solve('x**2 - 4', 'x');             -- ['-2', '2']\n"
-    "SELECT sympy.integrate('2*x', 'x');              -- 'x**2'\n"
     "```\n\n"
     "## Notes\n\n"
     "Invalid or unsafe expressions yield `NULL` rather than erroring (except `evaluate`, which raises "
@@ -144,29 +142,103 @@ _CATALOG_TAGS = {
     "vgi.license": "MIT",
     "vgi.support_contact": "https://github.com/Query-farm/vgi-sympy/issues",
     "vgi.support_policy_url": "https://github.com/Query-farm/vgi-sympy/blob/main/README.md",
+    # VGI152/407/920: fixed analyst-task suite for `vgi-lint simulate`. Each task's
+    # reference_sql is deterministic (SymPy emits canonical strings), so the suite
+    # grades by result comparison. Prompts describe the goal in plain language; the
+    # analyst discovers the functions by listing/describing the schema.
+    "vgi.agent_test_tasks": json.dumps(
+        [
+            {
+                "name": "simplify_trig_identity",
+                "prompt": "Algebraically simplify the expression sin(x)**2 + cos(x)**2 to its simplest canonical form.",
+                "reference_sql": "SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2')",
+                "ignore_column_names": True,
+            },
+            {
+                "name": "expand_binomial",
+                "prompt": "Expand the expression (x + 1)**2 by multiplying it out into a flat polynomial.",
+                "reference_sql": "SELECT sympy.main.expand('(x + 1)**2')",
+                "ignore_column_names": True,
+            },
+            {
+                "name": "factor_difference_of_squares",
+                "prompt": "Factor the polynomial x**2 - 1 into a product of irreducible factors.",
+                "reference_sql": "SELECT sympy.main.factor('x**2 - 1')",
+                "ignore_column_names": True,
+            },
+            {
+                "name": "render_latex",
+                "prompt": "Render the expression x**2 as a LaTeX markup string.",
+                "reference_sql": "SELECT sympy.main.to_latex('x**2')",
+                "ignore_column_names": True,
+            },
+            {
+                "name": "differentiate_cubic",
+                "prompt": "Compute the symbolic derivative of x**3 with respect to x.",
+                "reference_sql": "SELECT sympy.main.differentiate('x**3', 'x')",
+                "ignore_column_names": True,
+            },
+            {
+                "name": "integrate_linear",
+                "prompt": "Compute the indefinite integral (antiderivative, with no constant of "
+                "integration) of 2*x with respect to x.",
+                "reference_sql": "SELECT sympy.main.integrate('2*x', 'x')",
+                "ignore_column_names": True,
+            },
+            {
+                "name": "solve_quadratic",
+                "prompt": "Solve the equation x**2 - 4 = 0 for x. Return all solutions as a single "
+                "VARCHAR[] list value in one row (do not UNNEST them into separate rows).",
+                "reference_sql": "SELECT sympy.main.solve('x**2 - 4', 'x')",
+                "ignore_column_names": True,
+            },
+            {
+                "name": "evaluate_substitution",
+                "prompt": "Substitute x = 3 and y = 1 into the expression x**2 + y and evaluate it "
+                "to a numeric (DOUBLE) value.",
+                "reference_sql": "SELECT sympy.main.evaluate('x**2 + y', '{\"x\":3,\"y\":1}')",
+                "ignore_column_names": True,
+            },
+            {
+                "name": "symbolic_equality",
+                "prompt": "Determine whether the expressions 2*(x+1) and 2*x+2 are symbolically "
+                "equal, returning a boolean.",
+                "reference_sql": "SELECT sympy.main.symbolic_equal('2*(x+1)', '2*x+2')",
+                "ignore_column_names": True,
+            },
+            {
+                "name": "backing_version_present",
+                "prompt": "Using the worker, check whether its backing SymPy version is available. "
+                "Return exactly one boolean value that is TRUE when the worker's reported SymPy "
+                "version string is non-empty (its length is greater than zero). Return only that "
+                "boolean, not the version string itself.",
+                "reference_sql": "SELECT length(sympy.main.sympy_version(1)) > 0",
+                "ignore_column_names": True,
+            },
+        ]
+    ),
 }
 
 _SCHEMA_DOC_LLM = (
     "## Symbolic-math scalar functions (SymPy)\n\n"
-    "The `main` schema groups every computer-algebra scalar in this worker: `simplify`, `expand`, "
-    "`factor`, `differentiate`, `integrate`, `solve`, `evaluate`, `to_latex`, `symbolic_equal`, and "
-    "`sympy_version`.\n\n"
+    "The `main` schema groups every computer-algebra scalar in this worker, organized into algebraic "
+    "transforms, calculus, equation solving, numeric evaluation, and diagnostics (see the schema's "
+    "category registry to browse them).\n\n"
     "Each function takes expression strings (and, where relevant, a variable name or a JSON of "
     "variable values) and returns a SymPy-canonical string, a list of solutions, a number, or a "
     "boolean. The transforming functions return `NULL` for invalid or unsafe input so they can be "
     "applied across columns of free-form formulas without aborting a scan. Reach for this schema "
-    "whenever you need algebra or calculus on symbolic expressions inside SQL."
+    "whenever you need algebra or calculus on symbolic expressions inside SQL; list the schema to "
+    "discover the individual operations."
 )
 
 _SCHEMA_DOC_MD = (
     "# main — symbolic math\n\n"
     "Computer-algebra scalar functions over [SymPy](https://www.sympy.org/).\n\n"
-    "## Contents\n\n"
-    "- **Transforms:** `simplify`, `expand`, `factor`, `to_latex`\n"
-    "- **Calculus:** `differentiate`, `integrate`\n"
-    "- **Equations:** `solve`, `symbolic_equal`\n"
-    "- **Numeric:** `evaluate`\n"
-    "- **Meta:** `sympy_version`\n\n"
+    "## Organization\n\n"
+    "The functions fall into algebraic **transforms**, **calculus**, **equation** solving, numeric "
+    "**evaluation**, and worker **diagnostics** — browse the schema's category registry, or list the "
+    "schema, to find the operation you need.\n\n"
     "## Usage\n\n"
     "Inputs are expression strings such as `'(x + 1)**2'`. Outputs are SymPy-canonical strings "
     "(stable across runs), a `VARCHAR[]` of solutions, a `DOUBLE`, or a `BOOLEAN`.\n\n"
@@ -195,6 +267,39 @@ _SCHEMA_TAGS = {
     "topic": "symbolic-algebra-and-calculus",
     "vgi.doc_llm": _SCHEMA_DOC_LLM,
     "vgi.doc_md": _SCHEMA_DOC_MD,
+    # VGI413/408: ordered category registry for this schema. Each object carries a
+    # matching `vgi.category` naming one of these.
+    "vgi.categories": json.dumps(
+        [
+            {
+                "name": "transforms",
+                "title": "Algebraic transforms",
+                "description": "Rewrite an expression into another algebraic form: simplify, expand, "
+                "factor, and render to LaTeX.",
+            },
+            {
+                "name": "calculus",
+                "title": "Calculus",
+                "description": "Differentiate or integrate an expression with respect to a variable.",
+            },
+            {
+                "name": "equations",
+                "title": "Equations & equivalence",
+                "description": "Solve an equation for a variable, or test whether two expressions are "
+                "symbolically equal.",
+            },
+            {
+                "name": "numeric",
+                "title": "Numeric evaluation",
+                "description": "Substitute numeric values for variables and evaluate an expression to a number.",
+            },
+            {
+                "name": "diagnostics",
+                "title": "Diagnostics",
+                "description": "Report worker capabilities, such as the backing SymPy version.",
+            },
+        ]
+    ),
     "vgi.example_queries": _EXAMPLE_QUERIES,
     # VGI509: guaranteed-runnable, verified examples for agents. JSON list of
     # {"description","sql"} with catalog-qualified, self-contained SQL.
