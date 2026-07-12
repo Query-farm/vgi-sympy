@@ -118,7 +118,7 @@ class SimplifyFunction(ScalarFunction):
         }
         examples = [
             FunctionExample(
-                sql="SELECT sympy.simplify('sin(x)**2 + cos(x)**2')",
+                sql="SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2')",
                 description="Simplify a trig identity to 1",
             ),
         ]
@@ -169,7 +169,7 @@ class ExpandFunction(ScalarFunction):
         }
         examples = [
             FunctionExample(
-                sql="SELECT sympy.expand('(x + 1)**2')",
+                sql="SELECT sympy.main.expand('(x + 1)**2')",
                 description="Expand a binomial",
             ),
         ]
@@ -223,7 +223,7 @@ class FactorFunction(ScalarFunction):
         }
         examples = [
             FunctionExample(
-                sql="SELECT sympy.factor('x**2 - 1')",
+                sql="SELECT sympy.main.factor('x**2 - 1')",
                 description="Factor a difference of squares",
             ),
         ]
@@ -276,7 +276,7 @@ class ToLatexFunction(ScalarFunction):
         }
         examples = [
             FunctionExample(
-                sql="SELECT sympy.to_latex('x**2')",
+                sql="SELECT sympy.main.to_latex('x**2')",
                 description="Render x squared as LaTeX",
             ),
         ]
@@ -344,7 +344,7 @@ class DifferentiateFunction(ScalarFunction):
         }
         examples = [
             FunctionExample(
-                sql="SELECT sympy.differentiate('x**3', 'x')",
+                sql="SELECT sympy.main.differentiate('x**3', 'x')",
                 description="Differentiate x^3 -> 3*x**2",
             ),
         ]
@@ -404,7 +404,7 @@ class IntegrateFunction(ScalarFunction):
         }
         examples = [
             FunctionExample(
-                sql="SELECT sympy.integrate('2*x', 'x')",
+                sql="SELECT sympy.main.integrate('2*x', 'x')",
                 description="Integrate 2*x -> x**2",
             ),
         ]
@@ -469,11 +469,11 @@ class SolveFunction(ScalarFunction):
         }
         examples = [
             FunctionExample(
-                sql="SELECT sympy.solve('x**2 - 4', 'x')",
+                sql="SELECT sympy.main.solve('x**2 - 4', 'x')",
                 description="Solve x^2 - 4 = 0 -> ['-2', '2']",
             ),
             FunctionExample(
-                sql="SELECT UNNEST(sympy.solve('2*x = 10', 'x'))",
+                sql="SELECT UNNEST(sympy.main.solve('2*x = 10', 'x'))",
                 description="Unnest the solution rows",
             ),
         ]
@@ -538,7 +538,7 @@ class EvaluateFunction(ScalarFunction):
         }
         examples = [
             FunctionExample(
-                sql="SELECT sympy.evaluate('x**2 + y', '{\"x\":3,\"y\":1}')",
+                sql="SELECT sympy.main.evaluate('x**2 + y', '{\"x\":3,\"y\":1}')",
                 description="Substitute x=3, y=1 -> 10.0",
             ),
         ]
@@ -600,7 +600,7 @@ class SymbolicEqualFunction(ScalarFunction):
         }
         examples = [
             FunctionExample(
-                sql="SELECT sympy.symbolic_equal('2*(x+1)', '2*x+2')",
+                sql="SELECT sympy.main.symbolic_equal('2*(x+1)', '2*x+2')",
                 description="Prove two forms are equal -> true",
             ),
         ]
@@ -658,7 +658,7 @@ class SympyVersionFunction(ScalarFunction):
         }
         examples = [
             FunctionExample(
-                sql="SELECT sympy.sympy_version(1)",
+                sql="SELECT sympy.main.sympy_version(1)",
                 description="Report the SymPy version",
             ),
         ]
