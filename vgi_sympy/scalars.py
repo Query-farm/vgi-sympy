@@ -115,6 +115,20 @@ class SimplifyFunction(ScalarFunction):
                 "Returns `NULL` for `NULL`, invalid, or unsafe input. Simplification is heuristic: it "
                 "aims for a simpler form, not a guaranteed minimal one."
             ),
+            # VGI515: described examples (the native Meta.examples column drops
+            # descriptions, so the human-readable text is carried on this tag).
+            "vgi.example_queries": json.dumps(
+                [
+                    {
+                        "description": "Simplify a Pythagorean trig identity to 1.",
+                        "sql": "SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2')",
+                    },
+                    {
+                        "description": "Cancel a common factor from a rational expression.",
+                        "sql": "SELECT sympy.main.simplify('(x**2 - 1)/(x - 1)')",
+                    },
+                ]
+            ),
         }
         examples = [
             FunctionExample(
@@ -165,6 +179,18 @@ class ExpandFunction(ScalarFunction):
                 "```\n\n"
                 "## Notes\n\n"
                 "The opposite of `factor`. Returns `NULL` for `NULL`/invalid/unsafe input."
+            ),
+            "vgi.example_queries": json.dumps(
+                [
+                    {
+                        "description": "Expand a squared binomial into a flat polynomial.",
+                        "sql": "SELECT sympy.main.expand('(x + 1)**2')",
+                    },
+                    {
+                        "description": "Expand a product of conjugates to a difference of squares.",
+                        "sql": "SELECT sympy.main.expand('(x + y)*(x - y)')",
+                    },
+                ]
             ),
         }
         examples = [
@@ -220,6 +246,18 @@ class FactorFunction(ScalarFunction):
                 "The opposite of `expand`. Already-irreducible inputs return unchanged; "
                 "`NULL`/invalid/unsafe input returns `NULL`."
             ),
+            "vgi.example_queries": json.dumps(
+                [
+                    {
+                        "description": "Factor a difference of squares into a product.",
+                        "sql": "SELECT sympy.main.factor('x**2 - 1')",
+                    },
+                    {
+                        "description": "Factor a perfect-square trinomial.",
+                        "sql": "SELECT sympy.main.factor('x**2 + 2*x + 1')",
+                    },
+                ]
+            ),
         }
         examples = [
             FunctionExample(
@@ -272,6 +310,18 @@ class ToLatexFunction(ScalarFunction):
                 "## Notes\n\n"
                 "Output is raw LaTeX (no surrounding `$...$`). Returns `NULL` for `NULL`/invalid/"
                 "unsafe input."
+            ),
+            "vgi.example_queries": json.dumps(
+                [
+                    {
+                        "description": "Render x squared as LaTeX markup.",
+                        "sql": "SELECT sympy.main.to_latex('x**2')",
+                    },
+                    {
+                        "description": "Render a square root as LaTeX markup.",
+                        "sql": "SELECT sympy.main.to_latex('sqrt(x)')",
+                    },
+                ]
             ),
         }
         examples = [
@@ -341,6 +391,18 @@ class DifferentiateFunction(ScalarFunction):
                 "Variables other than `var` are held constant. Returns `NULL` for `NULL`/invalid/"
                 "unsafe input."
             ),
+            "vgi.example_queries": json.dumps(
+                [
+                    {
+                        "description": "Differentiate x**3 with respect to x.",
+                        "sql": "SELECT sympy.main.differentiate('x**3', 'x')",
+                    },
+                    {
+                        "description": "Differentiate sin(x) with respect to x.",
+                        "sql": "SELECT sympy.main.differentiate('sin(x)', 'x')",
+                    },
+                ]
+            ),
         }
         examples = [
             FunctionExample(
@@ -400,6 +462,18 @@ class IntegrateFunction(ScalarFunction):
                 "## Notes\n\n"
                 "The inverse of `differentiate`. Returns `NULL` when no closed form is found, or for "
                 "`NULL`/invalid/unsafe input. No constant of integration is added."
+            ),
+            "vgi.example_queries": json.dumps(
+                [
+                    {
+                        "description": "Integrate 2*x with respect to x (no constant of integration).",
+                        "sql": "SELECT sympy.main.integrate('2*x', 'x')",
+                    },
+                    {
+                        "description": "Integrate cos(x) with respect to x.",
+                        "sql": "SELECT sympy.main.integrate('cos(x)', 'x')",
+                    },
+                ]
             ),
         }
         examples = [
@@ -465,6 +539,18 @@ class SolveFunction(ScalarFunction):
                 "## Notes\n\n"
                 "Accepts `'lhs = rhs'` or a bare expression (assumed `= 0`). Solutions are sorted by "
                 "string. Empty list = no solutions; `NULL` = invalid/unsafe input."
+            ),
+            "vgi.example_queries": json.dumps(
+                [
+                    {
+                        "description": "Solve a quadratic for x, returning a VARCHAR[] of roots.",
+                        "sql": "SELECT sympy.main.solve('x**2 - 4', 'x')",
+                    },
+                    {
+                        "description": "Solve a linear 'lhs = rhs' equation and unnest the solution rows.",
+                        "sql": "SELECT UNNEST(sympy.main.solve('2*x = 10', 'x'))",
+                    },
+                ]
             ),
         }
         examples = [
@@ -535,6 +621,18 @@ class EvaluateFunction(ScalarFunction):
                 "`NULL` if free symbols remain or the result isn't real. **Errors** (not NULL) when "
                 "`vars_json` is not a JSON object of numbers."
             ),
+            "vgi.example_queries": json.dumps(
+                [
+                    {
+                        "description": "Substitute x=3, y=1 into an expression and evaluate to a DOUBLE.",
+                        "sql": "SELECT sympy.main.evaluate('x**2 + y', '{\"x\":3,\"y\":1}')",
+                    },
+                    {
+                        "description": "Evaluate a constant expression (2*pi) with no variables.",
+                        "sql": "SELECT sympy.main.evaluate('2*pi', '{}')",
+                    },
+                ]
+            ),
         }
         examples = [
             FunctionExample(
@@ -597,6 +695,18 @@ class SymbolicEqualFunction(ScalarFunction):
                 "Compares via `simplify(a - b) == 0`, so different-looking but equal forms match. "
                 "Returns `NULL` if either side is invalid/unsafe."
             ),
+            "vgi.example_queries": json.dumps(
+                [
+                    {
+                        "description": "Prove two different-looking forms are equal (TRUE).",
+                        "sql": "SELECT sympy.main.symbolic_equal('2*(x+1)', '2*x+2')",
+                    },
+                    {
+                        "description": "Show two distinct functions are not equal (FALSE).",
+                        "sql": "SELECT sympy.main.symbolic_equal('sin(x)', 'cos(x)')",
+                    },
+                ]
+            ),
         }
         examples = [
             FunctionExample(
@@ -654,6 +764,18 @@ class SympyVersionFunction(ScalarFunction):
                 "## Notes\n\n"
                 "Takes one ignored `BIGINT` row-driver argument (a scalar needs an input array to size "
                 "its output). The argument value has no effect."
+            ),
+            "vgi.example_queries": json.dumps(
+                [
+                    {
+                        "description": "Report the backing SymPy version string.",
+                        "sql": "SELECT sympy.main.sympy_version(1)",
+                    },
+                    {
+                        "description": "Check that the backing SymPy version is present (non-empty).",
+                        "sql": "SELECT length(sympy.main.sympy_version(1)) > 0",
+                    },
+                ]
             ),
         }
         examples = [

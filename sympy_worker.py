@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.13"
 # dependencies = [
-#     "vgi-python[http]>=0.15.0",
+#     "vgi-python[http]>=0.16.0",
 #     "sympy>=1.13",
 # ]
 # ///
@@ -97,8 +97,7 @@ _DESCRIPTION_MD = (
     "antiderivatives for a scientific pipeline, solve equations row by row, or render expressions for "
     "display. Because every transform is a per-row scalar that yields `NULL` on invalid or unsafe "
     "input (rather than aborting the scan), it drops into an ordinary projection or predicate and "
-    "composes over messy, semi-structured text without special-casing. List the schema to discover "
-    "the individual algebra, calculus, equation, and rendering operations it provides.\n\n"
+    "composes over messy, semi-structured text without special-casing.\n\n"
     "```sql\n"
     "SELECT sympy.simplify('sin(x)**2 + cos(x)**2');  -- '1'\n"
     "SELECT sympy.differentiate('x**3', 'x');         -- '3*x**2'\n"
@@ -228,17 +227,18 @@ _SCHEMA_DOC_LLM = (
     "variable values) and returns a SymPy-canonical string, a list of solutions, a number, or a "
     "boolean. The transforming functions return `NULL` for invalid or unsafe input so they can be "
     "applied across columns of free-form formulas without aborting a scan. Reach for this schema "
-    "whenever you need algebra or calculus on symbolic expressions inside SQL; list the schema to "
-    "discover the individual operations."
+    "whenever you need algebra or calculus on symbolic expressions inside SQL — for example to "
+    "canonicalize formula columns, grade answers against a key, or derive derivatives row by row."
 )
 
 _SCHEMA_DOC_MD = (
     "# main — symbolic math\n\n"
     "Computer-algebra scalar functions over [SymPy](https://www.sympy.org/).\n\n"
     "## Organization\n\n"
-    "The functions fall into algebraic **transforms**, **calculus**, **equation** solving, numeric "
-    "**evaluation**, and worker **diagnostics** — browse the schema's category registry, or list the "
-    "schema, to find the operation you need.\n\n"
+    "The functions fall into algebraic **transforms** (simplify, expand, factor, to_latex), "
+    "**calculus** (differentiate, integrate), **equation** solving (solve, symbolic_equal), numeric "
+    "**evaluation** (evaluate), and worker **diagnostics** (sympy_version), grouped by the schema's "
+    "`vgi.categories` registry.\n\n"
     "## Usage\n\n"
     "Inputs are expression strings such as `'(x + 1)**2'`. Outputs are SymPy-canonical strings "
     "(stable across runs), a `VARCHAR[]` of solutions, a `DOUBLE`, or a `BOOLEAN`.\n\n"
@@ -247,15 +247,43 @@ _SCHEMA_DOC_MD = (
     "sandboxed and never evaluates hostile input.\n"
 )
 
-_EXAMPLE_QUERIES = (
-    "SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2');\n"
-    "SELECT sympy.main.expand('(x + 1)**2');\n"
-    "SELECT sympy.main.factor('x**2 - 1');\n"
-    "SELECT sympy.main.differentiate('x**3', 'x');\n"
-    "SELECT sympy.main.integrate('2*x', 'x');\n"
-    "SELECT sympy.main.solve('x**2 - 4', 'x');\n"
-    "SELECT sympy.main.evaluate('x**2 + y', '{\"x\":3,\"y\":1}');\n"
-    "SELECT sympy.main.symbolic_equal('2*(x+1)', '2*x+2');"
+# VGI515: schema-level illustrative examples as a JSON list of {description, sql}
+# so every example carries a human-readable description.
+_EXAMPLE_QUERIES = json.dumps(
+    [
+        {
+            "description": "Simplify a Pythagorean trig identity to 1.",
+            "sql": "SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2')",
+        },
+        {
+            "description": "Expand a squared binomial into a flat polynomial.",
+            "sql": "SELECT sympy.main.expand('(x + 1)**2')",
+        },
+        {
+            "description": "Factor a difference of squares into a product.",
+            "sql": "SELECT sympy.main.factor('x**2 - 1')",
+        },
+        {
+            "description": "Differentiate x**3 with respect to x.",
+            "sql": "SELECT sympy.main.differentiate('x**3', 'x')",
+        },
+        {
+            "description": "Integrate 2*x with respect to x (no constant of integration).",
+            "sql": "SELECT sympy.main.integrate('2*x', 'x')",
+        },
+        {
+            "description": "Solve a quadratic equation for x, returning a VARCHAR[] of roots.",
+            "sql": "SELECT sympy.main.solve('x**2 - 4', 'x')",
+        },
+        {
+            "description": "Substitute x=3, y=1 into an expression and evaluate to a DOUBLE.",
+            "sql": "SELECT sympy.main.evaluate('x**2 + y', '{\"x\":3,\"y\":1}')",
+        },
+        {
+            "description": "Test that two different-looking expressions are symbolically equal.",
+            "sql": "SELECT sympy.main.symbolic_equal('2*(x+1)', '2*x+2')",
+        },
+    ]
 )
 
 _SCHEMA_TAGS = {

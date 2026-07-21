@@ -10,8 +10,12 @@
 # files under test/sql/. haybarn-unittest is a uv tool:
 #   uv tool install haybarn-unittest   # installs ~/.local/bin/haybarn-unittest
 
-# Worker command DuckDB uses for ATTACH (overridable).
-WORKER_STDIO    ?= uv run --python 3.13 sympy_worker.py
+# Worker command DuckDB uses for ATTACH (overridable). Use the project venv's
+# Python directly: `uv run sympy_worker.py` re-resolves the PEP 723 inline deps
+# into a *cached* isolated script env (`--no-sync` is a no-op for inline-metadata
+# scripts), which can serve a stale vgi-python and emit an out-of-date RPC schema.
+# The venv (from `uv sync`) always carries the locked SDK. Run `uv sync` first.
+WORKER_STDIO    ?= .venv/bin/python sympy_worker.py
 
 # haybarn-unittest lives in the uv tools bin; keep it on PATH.
 HAYBARN_BIN     ?= $(HOME)/.local/bin
