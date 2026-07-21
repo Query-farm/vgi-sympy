@@ -44,12 +44,26 @@ dependencies = [
 http = [
     "vgi-python[http]>=0.16.0",
 ]
+# HTTP-serving extra installed by the published Docker image (`pip install
+# '.[serve]'`) so the container can serve the worker over HTTP (/health + VGI RPC)
+# via `vgi-serve vgi_sympy.worker:SympyWorker --http`. Alias of `http`.
+serve = [
+    "vgi-python[http]>=0.16.0",
+]
 dev = [
     "pytest>=8",
     "ruff",
     "mypy",
     "pydoclint",
 ]
+
+[project.scripts]
+# Console-script entry the container's stdio mode and `bin/vgi-sympy-worker` exec.
+vgi-sympy-worker = "vgi_sympy.worker:main"
+
+[project.urls]
+Repository = "https://github.com/Query-farm/vgi-sympy"
+Issues = "https://github.com/Query-farm/vgi-sympy/issues"
 
 [build-system]
 requires = ["hatchling"]

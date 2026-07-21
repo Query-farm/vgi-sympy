@@ -696,6 +696,9 @@ dev = [
 http = [
     { name = "vgi-python", extra = ["http"] },
 ]
+serve = [
+    { name = "vgi-python", extra = ["http"] },
+]
 
 [package.metadata]
 requires-dist = [
@@ -707,8 +710,9 @@ requires-dist = [
     { name = "sympy", specifier = ">=1.13" },
     { name = "vgi-python", extras = ["http"], specifier = ">=0.16.0" },
     { name = "vgi-python", extras = ["http"], marker = "extra == 'http'", specifier = ">=0.16.0" },
+    { name = "vgi-python", extras = ["http"], marker = "extra == 'serve'", specifier = ">=0.16.0" },
 ]
-provides-extras = ["http", "dev"]
+provides-extras = ["http", "serve", "dev"]
 
 [[package]]
 name = "waitress"
