@@ -30,7 +30,7 @@ classifiers = [
 ]
 requires-python = ">=3.13"
 dependencies = [
-    "vgi-python[http]>=0.16.0",
+    "vgi-python[http]>=0.30.0",
     "sympy>=1.13",
     "pyarrow",
 ]
@@ -42,13 +42,13 @@ dependencies = [
 # dependency already pins `vgi-python[http]`, so a plain sync also pulls it; this
 # explicit extra keeps the `--extra http` install knob the CI job uses.)
 http = [
-    "vgi-python[http]>=0.16.0",
+    "vgi-python[http]>=0.30.0",
 ]
 # HTTP-serving extra installed by the published Docker image (`pip install
 # '.[serve]'`) so the container can serve the worker over HTTP (/health + VGI RPC)
 # via `vgi-serve vgi_sympy.worker:SympyWorker --http`. Alias of `http`.
 serve = [
-    "vgi-python[http]>=0.16.0",
+    "vgi-python[http]>=0.30.0",
 ]
 dev = [
     "pytest>=8",
