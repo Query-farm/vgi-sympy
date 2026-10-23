@@ -142,69 +142,53 @@ _CATALOG_TAGS = {
     "vgi.license": "MIT",
     "vgi.support_contact": "https://github.com/Query-farm/vgi-sympy/issues",
     "vgi.support_policy_url": "https://github.com/Query-farm/vgi-sympy/blob/main/README.md",
-    # VGI152/407/920: fixed analyst-task suite for `vgi-lint simulate`. Each task's
-    # reference_sql is deterministic (SymPy emits canonical strings), so the suite
-    # grades by result comparison. Prompts describe the goal in plain language; the
-    # analyst discovers the functions by listing/describing the schema.
+    # VGI152/407/920: fixed analyst-task suite for `vgi-lint simulate`. Only the
+    # public {name, prompt} pairs are published here (VGI416); the private graders
+    # (reference_sql, grading options) live in vgi-agent-tests.yaml at the repo root.
+    # Each reference_sql is deterministic (SymPy emits canonical strings), so the
+    # suite grades by result comparison. Prompts describe the goal in plain language;
+    # the analyst discovers the functions by listing/describing the schema.
     "vgi.agent_test_tasks": json.dumps(
         [
             {
                 "name": "simplify_trig_identity",
                 "prompt": "Algebraically simplify the expression sin(x)**2 + cos(x)**2 to its simplest canonical form.",
-                "reference_sql": "SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2')",
-                "ignore_column_names": True,
             },
             {
                 "name": "expand_binomial",
                 "prompt": "Expand the expression (x + 1)**2 by multiplying it out into a flat polynomial.",
-                "reference_sql": "SELECT sympy.main.expand('(x + 1)**2')",
-                "ignore_column_names": True,
             },
             {
                 "name": "factor_difference_of_squares",
                 "prompt": "Factor the polynomial x**2 - 1 into a product of irreducible factors.",
-                "reference_sql": "SELECT sympy.main.factor('x**2 - 1')",
-                "ignore_column_names": True,
             },
             {
                 "name": "render_latex",
                 "prompt": "Render the expression x**2 as a LaTeX markup string.",
-                "reference_sql": "SELECT sympy.main.to_latex('x**2')",
-                "ignore_column_names": True,
             },
             {
                 "name": "differentiate_cubic",
                 "prompt": "Compute the symbolic derivative of x**3 with respect to x.",
-                "reference_sql": "SELECT sympy.main.differentiate('x**3', 'x')",
-                "ignore_column_names": True,
             },
             {
                 "name": "integrate_linear",
                 "prompt": "Compute the indefinite integral (antiderivative, with no constant of "
                 "integration) of 2*x with respect to x.",
-                "reference_sql": "SELECT sympy.main.integrate('2*x', 'x')",
-                "ignore_column_names": True,
             },
             {
                 "name": "solve_quadratic",
                 "prompt": "Solve the equation x**2 - 4 = 0 for x. Return all solutions as a single "
                 "VARCHAR[] list value in one row (do not UNNEST them into separate rows).",
-                "reference_sql": "SELECT sympy.main.solve('x**2 - 4', 'x')",
-                "ignore_column_names": True,
             },
             {
                 "name": "evaluate_substitution",
                 "prompt": "Substitute x = 3 and y = 1 into the expression x**2 + y and evaluate it "
                 "to a numeric (DOUBLE) value.",
-                "reference_sql": "SELECT sympy.main.evaluate('x**2 + y', '{\"x\":3,\"y\":1}')",
-                "ignore_column_names": True,
             },
             {
                 "name": "symbolic_equality",
                 "prompt": "Determine whether the expressions 2*(x+1) and 2*x+2 are symbolically "
                 "equal, returning a boolean.",
-                "reference_sql": "SELECT sympy.main.symbolic_equal('2*(x+1)', '2*x+2')",
-                "ignore_column_names": True,
             },
             {
                 "name": "backing_version_present",
@@ -212,8 +196,6 @@ _CATALOG_TAGS = {
                 "Return exactly one boolean value that is TRUE when the worker's reported SymPy "
                 "version string is non-empty (its length is greater than zero). Return only that "
                 "boolean, not the version string itself.",
-                "reference_sql": "SELECT length(sympy.main.sympy_version(1)) > 0",
-                "ignore_column_names": True,
             },
         ]
     ),
@@ -362,7 +344,7 @@ _SYMPY_CATALOG = Catalog(
     source_url="https://github.com/Query-farm/vgi-sympy",
     schemas=[
         Schema(
-            name="main",
+            path=["main"],
             comment="Symbolic math (CAS): simplify/solve/differentiate/integrate/factor for SQL",
             tags=_SCHEMA_TAGS,
             functions=list(_FUNCTIONS),

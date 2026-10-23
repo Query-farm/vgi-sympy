@@ -30,7 +30,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated, Any, cast
 
 import pyarrow as pa
 from vgi.arguments import Param, Returns
@@ -38,6 +38,17 @@ from vgi.metadata import FunctionExample
 from vgi.scalar_function import ScalarFunction
 
 from . import cas
+
+# pyarrow's array classes are generic to the type-checker (pyarrow-stubs) but NOT
+# subscriptable at runtime, and the framework evaluates the compute annotations at
+# import via ``get_type_hints``. Alias the list array so mypy sees the parametrised
+# form while the runtime evaluation resolves to the bare class.
+if TYPE_CHECKING:
+    from typing import TypeAlias
+
+    _ListArray: TypeAlias = pa.ListArray[Any]  # noqa: UP040 - runtime needs the non-subscript form below
+else:
+    _ListArray = pa.ListArray
 
 # ---------------------------------------------------------------------------
 # Small mapping helpers: apply a pure function across an array, NULL -> NULL.
@@ -67,10 +78,10 @@ def _map_double2(a: pa.StringArray, b: pa.StringArray, fn: Callable[[str, str], 
     return pa.array(out, type=pa.float64())
 
 
-def _map_list_str(arr: pa.StringArray, b: pa.StringArray, fn: Callable[[str, str], list[str] | None]) -> pa.ListArray:
+def _map_list_str(arr: pa.StringArray, b: pa.StringArray, fn: Callable[[str, str], list[str] | None]) -> _ListArray:
     xs, ys = arr.to_pylist(), b.to_pylist()
     out = [None if x is None or y is None else fn(x, y) for x, y in zip(xs, ys, strict=True)]
-    return pa.array(out, type=pa.list_(pa.string()))
+    return cast("_ListArray", pa.array(out, type=pa.list_(pa.string())))
 
 
 # ===========================================================================
@@ -569,7 +580,7 @@ class SolveFunction(ScalarFunction):
         cls,
         equation: Annotated[pa.StringArray, Param(doc="Equation or expression to solve.")],
         var: Annotated[pa.StringArray, Param(doc="Variable name to solve for.")],
-    ) -> Annotated[pa.ListArray, Returns(arrow_type=pa.list_(pa.string()))]:
+    ) -> Annotated[_ListArray, Returns(arrow_type=pa.list_(pa.string()))]:
         """Map the pure CAS function over the Arrow input array(s)."""
         return _map_list_str(equation, var, cas.solve)
 

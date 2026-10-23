@@ -1,0 +1,34 @@
+# Private graders for `vgi-lint simulate` (VGI416). The worker publishes only
+# task names and prompts in vgi.agent_test_tasks; these canonical solutions and
+# grading options stay in the repo and are merged by task name.
+tasks:
+  - name: simplify_trig_identity
+    reference_sql: "SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2')"
+    ignore_column_names: true
+  - name: expand_binomial
+    reference_sql: "SELECT sympy.main.expand('(x + 1)**2')"
+    ignore_column_names: true
+  - name: factor_difference_of_squares
+    reference_sql: "SELECT sympy.main.factor('x**2 - 1')"
+    ignore_column_names: true
+  - name: render_latex
+    reference_sql: "SELECT sympy.main.to_latex('x**2')"
+    ignore_column_names: true
+  - name: differentiate_cubic
+    reference_sql: "SELECT sympy.main.differentiate('x**3', 'x')"
+    ignore_column_names: true
+  - name: integrate_linear
+    reference_sql: "SELECT sympy.main.integrate('2*x', 'x')"
+    ignore_column_names: true
+  - name: solve_quadratic
+    reference_sql: "SELECT sympy.main.solve('x**2 - 4', 'x')"
+    ignore_column_names: true
+  - name: evaluate_substitution
+    reference_sql: "SELECT sympy.main.evaluate('x**2 + y', '{\"x\":3,\"y\":1}')"
+    ignore_column_names: true
+  - name: symbolic_equality
+    reference_sql: "SELECT sympy.main.symbolic_equal('2*(x+1)', '2*x+2')"
+    ignore_column_names: true
+  - name: backing_version_present
+    reference_sql: "SELECT length(sympy.main.sympy_version(1)) > 0"
+    ignore_column_names: true

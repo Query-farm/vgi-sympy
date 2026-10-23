@@ -35,6 +35,7 @@ def _one(client: Client, name: str, *cols: list) -> list:
     results = list(
         client.scalar_function(
             function_name=name,
+            schema_path=["main"],
             input=iter([batch]),
             arguments=Arguments(positional=[]),
         )
@@ -102,6 +103,7 @@ class TestVersion:
         results = list(
             client.scalar_function(
                 function_name="sympy_version",
+                schema_path=["main"],
                 input=iter([batch]),
                 arguments=Arguments(positional=[]),
             )
