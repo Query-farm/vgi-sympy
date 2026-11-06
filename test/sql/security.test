@@ -8,7 +8,7 @@ statement ok
 LOAD vgi;
 
 statement ok
-ATTACH 'sympy' AS sympy (TYPE vgi, LOCATION '${VGI_SYMPY_WORKER}');
+ATTACH 'sympy' AS sympy (TYPE vgi, LOCATION '{VGI_SYMPY_WORKER}');
 
 # A code-execution attempt must NOT run a shell; it yields NULL (inert symbol or
 # rejected parse) -- never arbitrary Python.

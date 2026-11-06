@@ -142,7 +142,7 @@ uv run --no-sync mypy vgi_sympy/           # type check
 run as a `uv` stdio subprocess (exactly how DuckDB drives it after `ATTACH`) and
 runs the `test/sql/*.test` files via
 [`haybarn-unittest`](https://github.com/Query-farm-haybarn/haybarn)
-(`uv tool install haybarn-unittest`).
+(`uv tool install --prerelease allow 'haybarn-unittest>=2.0.0rc11,<2.1'`).
 
 ## Requirements
 
