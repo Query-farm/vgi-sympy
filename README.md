@@ -18,7 +18,7 @@ equality, all as plain SQL scalar functions, backed by
 
 ```sql
 INSTALL vgi FROM community; LOAD vgi;
-ATTACH 'sympy' (TYPE vgi, LOCATION 'uv run sympy_worker.py');
+ATTACH 'sympy' (TYPE vgi, LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-sympy@v0.2.0 vgi-sympy-worker');
 
 SELECT sympy.simplify('sin(x)**2 + cos(x)**2');      -- '1'
 SELECT sympy.expand('(x + 1)**2');                   -- 'x**2 + 2*x + 1'
@@ -37,6 +37,39 @@ Everything runs **offline and deterministically** — there is no network access
 and SymPy's canonical string output is stable, so the same input always gives
 the same answer. That determinism is what makes the functions testable from SQL
 (assert canonical forms, or use `symbolic_equal`).
+
+## Quick start
+
+The worker isn't on PyPI; [uv](https://docs.astral.sh/uv/) runs it straight from a tagged release on GitHub. `uvx` builds an isolated environment on the first ATTACH and reuses it afterwards:
+
+```sql
+INSTALL vgi FROM community;
+LOAD vgi;
+
+ATTACH 'sympy' AS sympy (TYPE vgi, LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-sympy@v0.2.0 vgi-sympy-worker');
+
+-- Simplify a Pythagorean trig identity to 1.
+SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2');
+
+-- Expand a squared binomial into a flat polynomial.
+SELECT sympy.main.expand('(x + 1)**2');
+```
+
+Change `@v0.2.0` to move to a newer release.
+
+### Other ways to run it
+
+- **Docker** (the image bundles the worker and its dependencies):
+
+  ```sql
+  ATTACH 'sympy' AS sympy (TYPE vgi, LOCATION 'docker://ghcr.io/query-farm/vgi-sympy:0.2.0');
+  ```
+
+- **From a local checkout** (`git clone https://github.com/Query-farm/vgi-sympy`), point `LOCATION` at `uv run --project /path/to/vgi-sympy vgi-sympy-worker`.
+
+### Build from source
+
+To build and test the worker yourself from a checkout, see [Development](#development).
 
 ## Safe parsing — how user expressions are handled (read this)
 
