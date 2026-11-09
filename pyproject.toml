@@ -1,6 +1,6 @@
 [project]
 name = "vgi-sympy"
-version = "0.2.0"
+version = "0.3.0"
 description = "Symbolic math (CAS) -- simplify/solve/differentiate/integrate/factor -- for DuckDB via VGI"
 readme = "README.md"
 keywords = [
