@@ -133,7 +133,8 @@ _KEYWORDS = json.dumps(
 )
 
 _CATALOG_TAGS = {
-    "vgi.title": "SymPy Symbolic Math (CAS)",
+    "vgi.title": "SymPy Symbolic Math",
+    "vgi.subtitle": "Simplify, factor, differentiate, integrate and solve symbolic math expressions.",
     "vgi.keywords": _KEYWORDS,
     "vgi.doc_llm": _DESCRIPTION_LLM,
     "vgi.doc_md": _DESCRIPTION_MD,
@@ -270,7 +271,7 @@ _EXAMPLE_QUERIES = json.dumps(
 )
 
 _SCHEMA_TAGS = {
-    "vgi.title": "SymPy CAS — main schema",
+    "vgi.title": "Math Functions",
     "vgi.keywords": _KEYWORDS,
     # VGI123 classifying tags use BARE keys (not vgi.-namespaced).
     "domain": "mathematics",
