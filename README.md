@@ -18,7 +18,7 @@ equality, all as plain SQL scalar functions, backed by
 
 ```sql
 INSTALL vgi FROM community; LOAD vgi;
-ATTACH 'sympy' (TYPE vgi, LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-sympy@v0.3.0 vgi-sympy-worker');
+ATTACH 'sympy' (TYPE vgi, LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-sympy@v0.4.0 vgi-sympy-worker');
 
 SELECT sympy.simplify('sin(x)**2 + cos(x)**2');      -- '1'
 SELECT sympy.expand('(x + 1)**2');                   -- 'x**2 + 2*x + 1'
@@ -46,7 +46,7 @@ The worker isn't on PyPI; [uv](https://docs.astral.sh/uv/) runs it straight from
 INSTALL vgi FROM community;
 LOAD vgi;
 
-ATTACH 'sympy' AS sympy (TYPE vgi, LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-sympy@v0.3.0 vgi-sympy-worker');
+ATTACH 'sympy' AS sympy (TYPE vgi, LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-sympy@v0.4.0 vgi-sympy-worker');
 
 -- Simplify a Pythagorean trig identity to 1.
 SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2');
@@ -55,7 +55,7 @@ SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2');
 SELECT sympy.main.expand('(x + 1)**2');
 ```
 
-Change `@v0.3.0` to move to a newer release.
+Change `@v0.4.0` to move to a newer release.
 
 ### Other ways to run it
 
