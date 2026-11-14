@@ -1,144 +1,114 @@
 # Symbolic models through SQL
 
-<a href="https://query.farm/"><img src="assets/query-farm-strata-sun.svg" alt="Query.Farm — Strata Sun" width="252"></a>
+[01 · When is the reservoir fullest?](01_reservoir_storage.ipynb) derives storage
+from a synthetic inflow pulse, checks two independent volume budgets, solves
+stationary points and boundaries, and compares rates with accumulated volumes.
+All algebra and numerical substitutions run through the real SymPy worker in
+visible SQL. Python presents its returned results; it does not import SymPy.
 
-<a href="https://query.farm/vgi/"><img src="assets/vgi-logo.png" alt="VGI — Vector Gateway Interface" width="280"></a>
+[Open in Colab](https://colab.research.google.com/github/Query-farm/vgi-sympy/blob/main/notebooks/01_reservoir_storage.ipynb)
+and run all cells. The bootstrap installs only the base
+[shared notebook package v0.3.6](https://github.com/Query-farm/vgi-example-notebooks/tree/v0.3.6).
+It preserves compatible preinstalled plotting and Jupyter libraries. The shared
+package owns the [presentation standard](https://github.com/Query-farm/vgi-example-notebooks/blob/v0.3.6/docs/standard.md),
+canonical branding and execution tooling. Saved GitHub charts use linked SVG
+assets; fresh Jupyter and Colab runs display native SVG.
 
-[Query.Farm](https://query.farm/) · [VGI](https://query.farm/vgi/)
+## Run locally
 
-| Notebook | Question and workflow |
-|---|---|
-| [01 · When is the reservoir fullest?](01_reservoir_storage.ipynb) | Derive storage from a synthetic inflow pulse, verify equivalent expressions and derivatives, solve extrema including boundaries, evaluate curves and reconcile the volume budget. |
-
-The saved notebook contains successful execution outputs and two embedded charts.
-Haybarn calls the real pinned SymPy worker running locally through VGI. Visible JupySQL `%%sql`
-cells perform every symbolic derivation, substitution, solve, check and domain
-calculation. Python configures the connection, renders tables and charts, and
-generates prose from query results. It does not import SymPy.
-
-## Install and select the kernel
-
-Prerequisites: `uv` and Git; uv can provision Python 3.13 or 3.14.
-From this `notebooks/` directory:
+Prerequisites are Git and [uv](https://docs.astral.sh/uv/). From this directory:
 
 ```sh
 uv sync --locked
+uv run --locked vgi-notebooks 01_reservoir_storage.ipynb --timeout 300
 ```
 
-The visible SQL uses literal
-`uvx --from git+https://github.com/Query-farm/vgi-sympy@ecee7f4a272ba1a5d3d86f7e6090a03c89d46ab8 --with vgi-python==0.51.0 --with sympy==1.14.0 vgi-sympy-worker`.
-This public commit is release v0.4.0. The project is distributed on GitHub; a PyPI
-lookup was unavailable during verification. uv fetches and caches the pinned
-worker and dependencies without a local source checkout or root environment.
-The explicit SDK and SymPy constraints preserve the tested protocol and algebra
-versions. The notebook separately locks Haybarn **2.0.0rc11**; no engine build is
-needed. Initial Git, package and VGI extension downloads need network access;
-the synthetic calculation needs no API or credentials. To upgrade, review the
-new remote revision and dependency constraints, then rerun default and experiment.
+The local environment installs the shared package's `[runner]` extra and locks
+Haybarn 2.0.0rc11. Select `notebooks/.venv/bin/python` in a Jupyter editor and
+restart the kernel before running all cells. The command above provides a
+temporary kernel specification and starts in this notebook directory.
 
-Open the notebook in a Jupyter-compatible editor. Select the Python interpreter
-`notebooks/.venv/bin/python` as the kernel, then **Restart Kernel → Run All**.
-The runner below supplies a temporary kernel specification, so no global kernel
-installation is required. If a Jupyter frontend requires a named kernel, register
-one explicitly with:
+The visible connection uses the published release directly:
 
-```sh
-uv run --locked python -m ipykernel install --user \
-  --name vgi-sympy-notebooks --display-name "Python (vgi-sympy notebooks)"
+```sql
+INSTALL vgi FROM community;
+LOAD vgi;
+ATTACH 'sympy' (TYPE vgi, LOCATION 'uvx --python 3.13 --from git+https://github.com/Query-farm/vgi-sympy@v0.4.0 vgi-sympy-worker');
 ```
 
-Start the kernel in this notebook directory. The runner sets that working directory
-and uses a native Haybarn connection, not a separate DuckDB SQLAlchemy connection.
+The worker runs in its own environment, with dependencies selected by that
+release. No checkout, local worker binary, dependency overrides or engine build
+is required. Initial downloads need network access; the calculation needs no API
+or credentials. The shared connection starts with an empty temporary SQL-secret
+directory and persistent secrets disabled. The returned SymPy version, **1.14.0**
+in the saved run, appears beside the results and in figure provenance. To upgrade,
+change the release deliberately and rerun the default, experiment and checks.
 
-Imports, setup, plotting source, result-derived prose source and cleanup are
-folded using Jupyter metadata and portable `hide-input`/`hide-output` tags. The
-parameters, connection SQL, analytical SQL and useful outputs stay visible.
-Some editors retain their own folding state; use **Collapse Cell Input** on
-Python helpers if needed.
+## Drain-rate experiment
 
-## Execute and preserve outputs
-
-From this notebook directory:
-
-```sh
-uv run --locked python execute.py
-```
-
-Each run uses a fresh kernel and fails on any cell error. The runner writes a
-staged notebook and atomically replaces the destination only after successful
-execution and notebook validation. A failed run leaves the previous successful
-default intact. The notebook itself checks algebraic equivalence, initial
-conditions, positive storage, complete numeric evaluations and mass balance.
-
-## Focused experiment
-
-Keep the defaults and increase only the drain from **8 to 12 L/min**. Predict an
-earlier, lower interior storage peak, an unchanged inflow peak, and **48 L** less
-final storage over the 12-minute pulse. Save this as a separate executed copy:
+Change only the drain from **8 to 12 L/min** in a separate output directory:
 
 ```sh
-uv run --locked python execute.py \
+uv run --locked vgi-notebooks 01_reservoir_storage.ipynb \
   --parameters '{"DRAIN_L_MIN": 12.0}' \
-  --output-dir artifacts/drain-12
+  --output-dir artifacts/drain-12 --timeout 300
 ```
 
-Overrides require a separate output destination, and cannot overwrite the source.
-The runner copies `assets/` and this guide beside experiment copies and records
-the overrides in `RUN.json`. Read the notebook's comparison card, turning points
-and storage chart; the panels adapt their scales, so compare values, not chart
-height. Reset `DRAIN_L_MIN = 8.0` for the default. Generated experiments, logs
-and extracted charts belong under ignored `notebooks/artifacts/`.
+The measured peak moves from **153.814 L at 10.472 min** to **113.856 L at
+9.464 min**. Final storage falls from **148 to 100 L**, matching the predicted
+48 L of extra drainage. The inflow peak remains **18 L/min at 6 min** and total
+inflow remains **144 L**. All seven identity checks and the simplified zero
+budget residual remain unchanged. Each run's panels use independent volume scales;
+compare their labeled values rather than apparent chart height.
 
-Experiment copies are directly reviewable with their relative branding and guide.
-To rerun a copied directory, enter it, run `uv sync --locked`, then
-`uv run --locked python execute.py`; all helpers and the locked environment
-description accompany it, and the worker starts from the pinned Git source.
+Overrides require a separate destination, and failed runs preserve the last
+successful default. Generated experiments, PNG review exports and logs stay
+ignored. The notebook is also executable by itself through its base bootstrap;
+it requires no local helper or asset companions.
 
-## Provenance, units and limits
+## Model, units and limits
 
 Inputs are explicitly synthetic: `q(t) = a*t*(tau-t)` L/min on the closed interval
-`0 <= t <= tau`, with a constant drain `d` L/min and initial storage `v0` L.
+`0 <= t <= tau`, with constant drain `d` L/min and initial storage `v0` L.
 Defaults are `tau=12 min`, `a=0.5 L/min³`, `d=8 L/min`, `v0=100 L`. There are no
-recorded or live observations. The worker treats symbols algebraically; units
-are declared assumptions, not automatically inferred dimensional types.
+recorded or live observations. Units are declared assumptions; the CAS does not
+infer dimensional types.
 
-The model has no capacity, spill, evaporation, drain shutoff or water-level
-dependent drainage. It rejects runs that reach zero storage. Parameters must be
-finite, duration 1–60 min, pulse coefficient 0.01–2 L/min³, initial volume
-1–10,000 L, drain strictly between zero and `a*tau²/4`, and chart samples 51–501.
-These restrictions keep two distinct interior stationary points. Boundary values
-are included when finding the global extrema; the grid is used only for drawing.
-The polynomial is not extrapolated past its stated interval.
+There is no capacity, spill, evaporation, drain shutoff or water-level dependent
+drainage. Runs that reach zero storage are rejected after evaluating every exact
+candidate minimum. Parameters must be finite, duration 1–60 min, pulse coefficient
+0.01–2 L/min³, initial volume 1–10,000 L, drain strictly between zero and
+`a*tau²/4`, and drawing samples 51–501. These restrictions keep two distinct
+interior stationary points. Both boundaries participate in the global-extrema
+comparison; the grid only draws curves. Nothing is extrapolated beyond the domain.
 
-SymPy transform failures and unresolved/non-real evaluations can return NULL.
+Transform failures and unresolved or non-real evaluations can return NULL.
 Required results are checked before drawing and never replaced with zero.
-Symbolic identities prove consistency with the assumed equations; they do not
-validate physical accuracy. The numerical substitution API returns double
-precision, so equality of numeric evaluations uses tolerances.
+Symbolic identities establish internal consistency, not physical accuracy.
+Numerical substitutions use double precision and tolerance-based comparisons.
 
-The unchanged official Strata Sun wordmark and VGI logo were copied from the
-approved `vgi-perps/notebooks/assets/` reference. Their upstream media-kit paths
-are `logo/wordmark-adaptive.svg` and `products/vgi/vgi-logo.png` at Query.Farm.
+## Coverage and verification
 
-## Repository checks
+[coverage.json](coverage.json) maps all **10 of 10** public logical SQL names to
+visible executed SQL, results and interpretations. Separate complete released and
+current catalogs include native function, table and view exports. The current
+public baseline is `ccbc26579f9d0f970ab12fbc4ae90cb4c10ccdb1`; its worker source and
+root dependencies match release v0.4.0. Examples ran against the release: exact
+runtime coverage is 10/10 for the release and 0/10 for current-main revision,
+with reviewed interface coverage 10/10 for both.
 
-The contributor guide also requires:
+The saved default has 29 executed code cells and two SVG charts. Verification
+includes the default, a notebook-only drain-12 run with a fresh worker cache,
+all four figures, three runner protections, two input rejections and the
+positive-storage domain rejection. A fresh Python 3.12 kernel with already
+imported pandas 2.2.3, Matplotlib 3.10.0, IPython 8.30.0, ipykernel 6.17.1 and
+jupyter-client 7.4.9 completed the notebook after base-only installation; those
+versions remained unchanged and `pip check` passed. This is a local compatibility
+test, not a claim of a manual hosted-Colab run.
 
-```sh
-uv run --no-sync pytest -q
-make test-sql
-uv run --no-sync ruff check .
-uv run --no-sync ruff format --check .
-uv run --no-sync mypy vgi_sympy/
-```
+Repository checks passed: 41 pytest tests, 31 SQL assertions across CAS and
+security cases, Ruff, formatting, mypy, isolated doclint and executed metadata
+validation (100/100, L2, zero findings). The worker implementation and root lock
+are unchanged. The contributor commands remain in the root `CLAUDE.md`.
 
-If a locally installed legacy `haybarn-unittest` cannot load the matching VGI
-extension, use the published runner without changing the worker or root lock:
-
-```sh
-VGI_SYMPY_WORKER="$PWD/.venv/bin/python $PWD/sympy_worker.py" \
-  uvx --from 'haybarn-unittest==2.0.0rc11' haybarn-unittest \
-  --keep-home --test-dir . 'test/sql/*'
-```
-
-<a href="https://query.farm/"><img src="assets/query-farm-strata-sun.svg" alt="Query.Farm — Strata Sun" width="252"></a>
+<p><a href="https://query.farm/"><img src="https://raw.githubusercontent.com/Query-farm/vgi-example-notebooks/v0.1.1/assets/query-farm-strata-sun.svg" alt="Query.Farm — Strata Sun" width="252"></a></p>

@@ -1,0 +1,379 @@
+{
+  "schema_version": 1,
+  "catalogs": {
+    "released": {
+      "path": "coverage/catalog-released.json",
+      "sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+        "notes": "Complete native functions/tables/views exports through actual Haybarn attachment; cross-checked against scalars.SCALAR_FUNCTIONS and worker registration. Ten logical public names, no tables or views, none excluded. Release/current interface and worker source/root dependencies agree; notebook execution uses the release, not current main."
+      }
+    },
+    "current": {
+      "path": "coverage/catalog-current.json",
+      "sha256": "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514",
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "catalog_sha256": "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514",
+        "notes": "Complete native functions/tables/views exports through actual Haybarn attachment; cross-checked against scalars.SCALAR_FUNCTIONS and worker registration. Ten logical public names, no tables or views, none excluded. Release/current interface and worker source/root dependencies agree; notebook execution uses the release, not current main."
+      }
+    }
+  },
+  "notebooks": [
+    {
+      "path": "01_reservoir_storage.ipynb",
+      "sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+      "execution": {
+        "path": "coverage/run-01.json",
+        "sha256": "35685463e8f9bd1b32fbfa930aa47c7e91e2233f46ec2e6b65af57fdd831e816"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "object": {
+        "schema": "main",
+        "name": "integrate"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "sql": [
+        {
+          "cell": "6a681498",
+          "reference": "sympy.main.integrate"
+        }
+      ],
+      "narrative_cells": [
+        "b258a2bd"
+      ],
+      "result_cells": [
+        "6a681498"
+      ],
+      "interpretation_cells": [
+        "14893a99"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "notebook_sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+        "catalog_sha256": [
+          "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+          "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514"
+        ],
+        "purpose": "Derive storage from net flow and separately accumulate inflow and drained volume.",
+        "finding": "The returned primitive is -a*t**3/3+a*t**2*tau/2-d*t. Its zero value at t=0 permits adding v0 to satisfy the stated initial condition; the independent cumulative budget agrees."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "differentiate"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "sql": [
+        {
+          "cell": "6a681498",
+          "reference": "sympy.main.differentiate"
+        }
+      ],
+      "narrative_cells": [
+        "b258a2bd"
+      ],
+      "result_cells": [
+        "6a681498"
+      ],
+      "interpretation_cells": [
+        "14893a99"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "notebook_sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+        "catalog_sha256": [
+          "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+          "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514"
+        ],
+        "purpose": "Recover net flow from derived storage and use curvature to classify stationary candidates.",
+        "finding": "The displayed storage derivative is -a*t**2+a*t*tau-d and is symbolically equal to net flow. Its derivative has positive curvature at the interior minimum and negative curvature at the maximum."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "expand"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "sql": [
+        {
+          "cell": "6a681498",
+          "reference": "sympy.main.expand"
+        }
+      ],
+      "narrative_cells": [
+        "b258a2bd"
+      ],
+      "result_cells": [
+        "6a681498"
+      ],
+      "interpretation_cells": [
+        "14893a99"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "notebook_sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+        "catalog_sha256": [
+          "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+          "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514"
+        ],
+        "purpose": "Expose the polynomial form used in the volume derivation while retaining the pulse interpretation.",
+        "finding": "The displayed expanded inflow -a*t**2+a*t*tau is symbolically equal to a*t*(tau-t), verified before numeric evaluation."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "factor"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "sql": [
+        {
+          "cell": "6a681498",
+          "reference": "sympy.main.factor"
+        }
+      ],
+      "narrative_cells": [
+        "b258a2bd"
+      ],
+      "result_cells": [
+        "6a681498"
+      ],
+      "interpretation_cells": [
+        "14893a99"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "notebook_sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+        "catalog_sha256": [
+          "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+          "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514"
+        ],
+        "purpose": "Recover the pulse endpoints from the expanded polynomial as an independent representation check.",
+        "finding": "The displayed factored form -a*t*(t-tau) is symbolically equal to the original pulse; its sign and endpoint structure remain consistent on the declared closed interval."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "simplify"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "sql": [
+        {
+          "cell": "budget-proof-sql",
+          "reference": "sympy.main.simplify"
+        }
+      ],
+      "narrative_cells": [
+        "budget-proof-question"
+      ],
+      "result_cells": [
+        "budget-proof-interpretation"
+      ],
+      "interpretation_cells": [
+        "budget-proof-interpretation"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "notebook_sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+        "catalog_sha256": [
+          "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+          "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514"
+        ],
+        "purpose": "Reduce separately integrated inflow minus drain and check its difference from net-flow storage.",
+        "finding": "The returned canonical budget is -a*t**3/3+a*t**2*tau/2-d*t+v0; the closure residual simplifies to zero, proving equivalence of the two modeled budgets before substitution."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "symbolic_equal"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "sql": [
+        {
+          "cell": "3587208f",
+          "reference": "sympy.main.symbolic_equal"
+        }
+      ],
+      "narrative_cells": [
+        "budget-proof-question"
+      ],
+      "result_cells": [
+        "14893a99"
+      ],
+      "interpretation_cells": [
+        "14893a99"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "notebook_sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+        "catalog_sha256": [
+          "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+          "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514"
+        ],
+        "purpose": "Validate equivalent inflow forms, derivative, initial conditions and independent storage budget before plotting.",
+        "finding": "All seven symbolic/numeric consistency checks pass, including the zero simplification residual. They establish internal mathematical consistency, not physical accuracy of the synthetic reservoir."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "to_latex"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "sql": [
+        {
+          "cell": "82018ff9",
+          "reference": "sympy.main.to_latex"
+        }
+      ],
+      "narrative_cells": [
+        "b258a2bd"
+      ],
+      "result_cells": [
+        "fd961301"
+      ],
+      "interpretation_cells": [
+        "fd961301"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "notebook_sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+        "catalog_sha256": [
+          "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+          "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514"
+        ],
+        "purpose": "Present the actual returned inflow, storage and slope expressions with their declared units.",
+        "finding": "Three rendered equations are generated by the worker and interpreted as L/min, L and L/min respectively. Dimensional semantics are explicit assumptions, not inferred by the CAS."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "solve"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "sql": [
+        {
+          "cell": "1ea8a4cb",
+          "reference": "sympy.main.solve"
+        }
+      ],
+      "narrative_cells": [
+        "0587ea32"
+      ],
+      "result_cells": [
+        "931c00bd"
+      ],
+      "interpretation_cells": [
+        "2c81a95e"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "notebook_sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+        "catalog_sha256": [
+          "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+          "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514"
+        ],
+        "purpose": "Find all interior stationary candidates and compare them with both domain boundaries.",
+        "finding": "The two roots are 1.527864 and 10.472136 min; the four-candidate table identifies a positive minimum and the global maximum 153.814 L at 10.472 min. Grid sampling is not used to locate extrema."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "evaluate"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "sql": [
+        {
+          "cell": "415906fc",
+          "reference": "sympy.main.evaluate"
+        }
+      ],
+      "narrative_cells": [
+        "f0d6a654"
+      ],
+      "result_cells": [
+        "0059d755"
+      ],
+      "interpretation_cells": [
+        "0e9baa23"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "notebook_sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+        "catalog_sha256": [
+          "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+          "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514"
+        ],
+        "purpose": "Substitute parameters and time into worker-derived expressions to draw the storage and accumulated-flow curves.",
+        "finding": "All 121 samples are present, mass balance residual is below tolerance, and sampled storage remains within the exact candidate extrema. No missing or non-real result is filled with zero."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "sympy_version"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "sql": [
+        {
+          "cell": "5c19c7d7",
+          "reference": "sympy.main.sympy_version"
+        }
+      ],
+      "narrative_cells": [
+        "3a56e033"
+      ],
+      "result_cells": [
+        "runtime-version-provenance"
+      ],
+      "interpretation_cells": [
+        "runtime-version-provenance"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root/notebooks_sympy",
+        "reviewed_at": "2026-11-14T18:50:23.725454+00:00",
+        "notebook_sha256": "edf8e2c2fb97f5b784883942724848b397db810f8899b917ac6ed93d008b2a5d",
+        "catalog_sha256": [
+          "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+          "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514"
+        ],
+        "purpose": "Bind symbolic expression outputs and comparisons to the actual worker library version.",
+        "finding": "The worker returns SymPy 1.14.0; this value is displayed, retained in both figure source footers and the experiment comparison card. Identity checks use meaning rather than a particular canonical expression spelling."
+      }
+    }
+  ]
+}
