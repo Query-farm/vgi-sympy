@@ -197,3 +197,7 @@ Written by [Query.Farm](https://query.farm).
 
 Copyright 2026 Query Farm LLC - https://query.farm
 
+
+## Executed notebooks
+
+[Symbolic reservoir analysis](notebooks/README.md) derives and verifies a synthetic flow model through the pinned published worker.
