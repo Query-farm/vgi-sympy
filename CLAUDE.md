@@ -19,6 +19,8 @@ sympy_worker.py        repo-root stdio entry point; PEP 723 inline deps; main()
 vgi_sympy/
   cas.py               pure CAS logic + the SAFE PARSER; no Arrow/VGI; unit-testable
   scalars.py           per-row Arrow scalar adapters over cas.py
+  examples.py          composed (multi-function) example queries, defined once and
+                       referenced from worker.py + scalars.py; pinned in test/sql/cas.test
 tests/                 pytest: test_cas (pure, incl. safe-parsing), test_scalars (Client RPC)
 test/sql/*.test        haybarn-unittest sqllogictest — authoritative E2E
 Makefile               test / test-unit / test-sql / lint

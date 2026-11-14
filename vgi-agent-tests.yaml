@@ -32,3 +32,12 @@ tasks:
   - name: backing_version_present
     reference_sql: "SELECT length(sympy.main.sympy_version(1)) > 0"
     ignore_column_names: true
+  # Composed tasks: chain two functions (integrate/differentiate -> evaluate).
+  - name: definite_integral
+    reference_sql: >-
+      SELECT sympy.main.evaluate(sympy.main.integrate('x**2', 'x'), '{"x":3}')
+      - sympy.main.evaluate(sympy.main.integrate('x**2', 'x'), '{"x":0}')
+    ignore_column_names: true
+  - name: slope_at_point
+    reference_sql: "SELECT sympy.main.evaluate(sympy.main.differentiate('x**3 - 2*x', 'x'), '{\"x\":2}')"
+    ignore_column_names: true

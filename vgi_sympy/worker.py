@@ -44,6 +44,7 @@ import json
 from vgi import Worker
 from vgi.catalog import Catalog, Schema
 
+from vgi_sympy.examples import ANTIDERIVATIVE_CHECK, COMPOSED_EXAMPLES, CRITICAL_POINTS
 from vgi_sympy.scalars import SCALAR_FUNCTIONS
 
 _FUNCTIONS: list[type] = [*SCALAR_FUNCTIONS]
@@ -198,6 +199,19 @@ _CATALOG_TAGS = {
                 "version string is non-empty (its length is greater than zero). Return only that "
                 "boolean, not the version string itself.",
             },
+            {
+                "name": "definite_integral",
+                "prompt": "Compute the definite integral of x**2 with respect to x from x = 0 to x = 3 "
+                "symbolically (find the antiderivative, then take its value at the upper bound minus its "
+                "value at the lower bound). Return exactly one row with a single DOUBLE column holding "
+                "the result.",
+            },
+            {
+                "name": "slope_at_point",
+                "prompt": "Find the slope of the curve y = x**3 - 2*x at x = 2 by symbolically "
+                "differentiating it with respect to x and evaluating the derivative there. Return exactly "
+                "one row with a single DOUBLE column holding the slope.",
+            },
         ]
     ),
 }
@@ -267,6 +281,8 @@ _EXAMPLE_QUERIES = json.dumps(
             "description": "Test that two different-looking expressions are symbolically equal.",
             "sql": "SELECT sympy.main.symbolic_equal('2*(x+1)', '2*x+2')",
         },
+        # Composed examples chaining several functions (defined once in vgi_sympy.examples).
+        *COMPOSED_EXAMPLES,
     ]
 )
 
@@ -333,6 +349,8 @@ _SCHEMA_TAGS = {
                 "description": "Substitute x=3, y=1 and evaluate to a DOUBLE.",
                 "sql": "SELECT sympy.main.evaluate('x**2 + y', '{\"x\":3,\"y\":1}')",
             },
+            CRITICAL_POINTS,
+            ANTIDERIVATIVE_CHECK,
         ]
     ),
 }

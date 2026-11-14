@@ -53,6 +53,15 @@ SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2');
 
 -- Expand a squared binomial into a flat polynomial.
 SELECT sympy.main.expand('(x + 1)**2');
+
+-- Chain functions: verify antiderivatives by differentiating them back
+-- (every row's `verified` is true).
+SELECT integrand,
+       sympy.main.integrate(integrand, 'x') AS antiderivative,
+       sympy.main.symbolic_equal(
+         sympy.main.differentiate(sympy.main.integrate(integrand, 'x'), 'x'), integrand) AS verified
+FROM (VALUES ('x*exp(x)'), ('1/(1 + x**2)'), ('sin(x)**2'), ('log(x)')) AS t(integrand)
+ORDER BY integrand;
 ```
 
 Change `@v0.4.0` to move to a newer release.
@@ -148,6 +157,7 @@ vgi_sympy/
   __init__.py
   cas.py                 # pure CAS logic + the safe parser (no Arrow/VGI deps)
   scalars.py             # per-row Arrow scalar adapters over cas.py
+  examples.py            # composed multi-function example queries (metadata)
 tests/
   test_cas.py            # pure-logic unit tests, incl. safe-parsing tests
   test_scalars.py        # scalars via vgi.client.Client (subprocess worker)

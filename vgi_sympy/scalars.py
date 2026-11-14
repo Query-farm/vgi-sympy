@@ -38,6 +38,7 @@ from vgi.metadata import FunctionExample
 from vgi.scalar_function import ScalarFunction
 
 from . import cas
+from .examples import ANTIDERIVATIVE_CHECK, CRITICAL_POINTS, FACTOR_VS_ROOTS, GRADE_ANSWERS
 
 # pyarrow's array classes are generic to the type-checker (pyarrow-stubs) but NOT
 # subscriptable at runtime, and the framework evaluates the compute annotations at
@@ -267,6 +268,7 @@ class FactorFunction(ScalarFunction):
                         "description": "Factor a perfect-square trinomial.",
                         "sql": "SELECT sympy.main.factor('x**2 + 2*x + 1')",
                     },
+                    FACTOR_VS_ROOTS,
                 ]
             ),
         }
@@ -275,6 +277,7 @@ class FactorFunction(ScalarFunction):
                 sql="SELECT sympy.main.factor('x**2 - 1')",
                 description="Factor a difference of squares",
             ),
+            FunctionExample(sql=FACTOR_VS_ROOTS["sql"], description=FACTOR_VS_ROOTS["description"]),
         ]
 
     @classmethod
@@ -412,6 +415,7 @@ class DifferentiateFunction(ScalarFunction):
                         "description": "Differentiate sin(x) with respect to x.",
                         "sql": "SELECT sympy.main.differentiate('sin(x)', 'x')",
                     },
+                    CRITICAL_POINTS,
                 ]
             ),
         }
@@ -420,6 +424,7 @@ class DifferentiateFunction(ScalarFunction):
                 sql="SELECT sympy.main.differentiate('x**3', 'x')",
                 description="Differentiate x^3 -> 3*x**2",
             ),
+            FunctionExample(sql=CRITICAL_POINTS["sql"], description=CRITICAL_POINTS["description"]),
         ]
 
     @classmethod
@@ -484,6 +489,7 @@ class IntegrateFunction(ScalarFunction):
                         "description": "Integrate cos(x) with respect to x.",
                         "sql": "SELECT sympy.main.integrate('cos(x)', 'x')",
                     },
+                    ANTIDERIVATIVE_CHECK,
                 ]
             ),
         }
@@ -492,6 +498,7 @@ class IntegrateFunction(ScalarFunction):
                 sql="SELECT sympy.main.integrate('2*x', 'x')",
                 description="Integrate 2*x -> x**2",
             ),
+            FunctionExample(sql=ANTIDERIVATIVE_CHECK["sql"], description=ANTIDERIVATIVE_CHECK["description"]),
         ]
 
     @classmethod
@@ -716,6 +723,7 @@ class SymbolicEqualFunction(ScalarFunction):
                         "description": "Show two distinct functions are not equal (FALSE).",
                         "sql": "SELECT sympy.main.symbolic_equal('sin(x)', 'cos(x)')",
                     },
+                    GRADE_ANSWERS,
                 ]
             ),
         }
@@ -724,6 +732,7 @@ class SymbolicEqualFunction(ScalarFunction):
                 sql="SELECT sympy.main.symbolic_equal('2*(x+1)', '2*x+2')",
                 description="Prove two forms are equal -> true",
             ),
+            FunctionExample(sql=GRADE_ANSWERS["sql"], description=GRADE_ANSWERS["description"]),
         ]
 
     @classmethod

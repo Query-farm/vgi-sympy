@@ -100,5 +100,72 @@ FROM (VALUES ('x + x'), ('2*x - x'), ('0*y')) AS t(e);
 2*x - x	x
 x + x	2*x
 
+
+# --- composed examples (vgi_sympy/examples.py; published in metadata) -----
+# CRITICAL_POINTS
+query III
+WITH crit AS (
+  SELECT UNNEST(sympy.main.solve(sympy.main.differentiate('x**3 - 3*x', 'x'), 'x')) AS root
+), pts AS (
+  SELECT root, sympy.main.evaluate(root, '{}') AS x_value FROM crit
+)
+SELECT root, x_value,
+       sympy.main.evaluate('x**3 - 3*x', '{"x": ' || x_value || '}') AS f_value
+FROM pts
+ORDER BY x_value;
+----
+-1	-1.0	2.0
+1	1.0	-2.0
+
+# ANTIDERIVATIVE_CHECK
+query III
+SELECT integrand,
+       sympy.main.integrate(integrand, 'x') AS antiderivative,
+       sympy.main.symbolic_equal(
+         sympy.main.differentiate(sympy.main.integrate(integrand, 'x'), 'x'), integrand) AS verified
+FROM (VALUES ('x*exp(x)'), ('1/(1 + x**2)'), ('sin(x)**2'), ('log(x)')) AS t(integrand)
+ORDER BY integrand;
+----
+1/(1 + x**2)	atan(x)	true
+log(x)	x*log(x) - x	true
+sin(x)**2	x/2 - sin(x)*cos(x)/2	true
+x*exp(x)	(x - 1)*exp(x)	true
+
+# GRADE_ANSWERS
+query III
+SELECT answer,
+       sympy.main.to_latex(answer) AS latex,
+       sympy.main.symbolic_equal(answer, '(x + 1)**2') AS correct
+FROM (VALUES ('x**2 + 2*x + 1'), ('(1 + x)*(x + 1)'), ('x**2 + 1'), ('x*(x + 2) + 1')) AS t(answer)
+ORDER BY answer;
+----
+(1 + x)*(x + 1)	\left(x + 1\right)^{2}	true
+x*(x + 2) + 1	x \left(x + 2\right) + 1	true
+x**2 + 1	x^{2} + 1	false
+x**2 + 2*x + 1	x^{2} + 2 x + 1	true
+
+# FACTOR_VS_ROOTS
+query III
+SELECT poly,
+       sympy.main.factor(poly) AS factored,
+       sympy.main.solve(poly, 'x') AS roots
+FROM (VALUES ('x**3 - 6*x**2 + 11*x - 6'), ('x**2 - 2')) AS t(poly)
+ORDER BY poly;
+----
+x**2 - 2	x**2 - 2	['-sqrt(2)', 'sqrt(2)']
+x**3 - 6*x**2 + 11*x - 6	(x - 3)*(x - 2)*(x - 1)	[1, 2, 3]
+
+# Composed agent-task graders (vgi-agent-tests.yaml).
+query I
+SELECT sympy.main.evaluate(sympy.main.integrate('x**2', 'x'), '{"x":3}')
+  - sympy.main.evaluate(sympy.main.integrate('x**2', 'x'), '{"x":0}');
+----
+9.0
+
+query I
+SELECT sympy.main.evaluate(sympy.main.differentiate('x**3 - 2*x', 'x'), '{"x":2}');
+----
+10.0
+
 statement ok
 DETACH sympy;
