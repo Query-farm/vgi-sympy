@@ -1,0 +1,718 @@
+{
+  "schema_version": 1,
+  "status": "met",
+  "meets_target": true,
+  "catalogs": {
+    "released": {
+      "catalog_status": "verified",
+      "revision": "v0.4.0",
+      "catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929",
+      "collection_reconciled": true,
+      "denominator": 10,
+      "observed_objects": 10,
+      "required": 10,
+      "verified_count": 10,
+      "candidate_count": 0,
+      "fraction": 1.0,
+      "meets_target": true,
+      "exact_runtime_count": 10,
+      "runtime_revisions": [
+        "v0.4.0"
+      ],
+      "covered": [
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "differentiate"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "evaluate"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "expand"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "factor"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "integrate"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "simplify"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "solve"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "symbolic_equal"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "sympy_version"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "to_latex"
+        }
+      ],
+      "uncovered": [],
+      "objects": [
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "differentiate",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "differentiate(VARCHAR, VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "evaluate",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "evaluate(VARCHAR, VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "expand",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "expand(VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "factor",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "factor(VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "integrate",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "integrate(VARCHAR, VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "simplify",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "simplify(VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "solve",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "solve(VARCHAR, VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "symbolic_equal",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "symbolic_equal(VARCHAR, VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "sympy_version",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "sympy_version(BIGINT)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "to_latex",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "to_latex(VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        }
+      ],
+      "issues": []
+    },
+    "current": {
+      "catalog_status": "verified",
+      "revision": "ccbc26579f9d0f970ab12fbc4ae90cb4c10ccdb1",
+      "catalog_sha256": "55259748524ea9046839c7f7f527227b3225081270429ec126efb26169b33514",
+      "collection_reconciled": true,
+      "denominator": 10,
+      "observed_objects": 10,
+      "required": 10,
+      "verified_count": 10,
+      "candidate_count": 0,
+      "fraction": 1.0,
+      "meets_target": true,
+      "exact_runtime_count": 0,
+      "runtime_revisions": [
+        "v0.4.0"
+      ],
+      "covered": [
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "differentiate"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "evaluate"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "expand"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "factor"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "integrate"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "simplify"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "solve"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "symbolic_equal"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "sympy_version"
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "to_latex"
+        }
+      ],
+      "uncovered": [],
+      "objects": [
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "differentiate",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "differentiate(VARCHAR, VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "evaluate",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "evaluate(VARCHAR, VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "expand",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "expand(VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "factor",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "factor(VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "integrate",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "integrate(VARCHAR, VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "simplify",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "simplify(VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "solve",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "solve(VARCHAR, VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "symbolic_equal",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "symbolic_equal(VARCHAR, VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "sympy_version",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "sympy_version(BIGINT)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        },
+        {
+          "schema": [
+            "main"
+          ],
+          "name": "to_latex",
+          "kinds": [
+            "function"
+          ],
+          "signatures": [
+            "to_latex(VARCHAR)"
+          ],
+          "access": [
+            "read"
+          ],
+          "authentication": [
+            "none"
+          ]
+        }
+      ],
+      "issues": []
+    }
+  },
+  "interface_drift": {
+    "known": true,
+    "current_only": [],
+    "released_only": [],
+    "changed": []
+  },
+  "notebooks": {
+    "01_reservoir_storage.ipynb": {
+      "verified": true,
+      "issues": []
+    }
+  },
+  "examples": [
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "integrate"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "runtime_revision": "v0.4.0",
+      "runtime_catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "differentiate"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "runtime_revision": "v0.4.0",
+      "runtime_catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "expand"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "runtime_revision": "v0.4.0",
+      "runtime_catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "factor"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "runtime_revision": "v0.4.0",
+      "runtime_catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "simplify"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "runtime_revision": "v0.4.0",
+      "runtime_catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "symbolic_equal"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "runtime_revision": "v0.4.0",
+      "runtime_catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "to_latex"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "runtime_revision": "v0.4.0",
+      "runtime_catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "solve"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "runtime_revision": "v0.4.0",
+      "runtime_catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "evaluate"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "runtime_revision": "v0.4.0",
+      "runtime_catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929"
+    },
+    {
+      "status": "verified",
+      "issues": [],
+      "verified_catalogs": [
+        "released",
+        "current"
+      ],
+      "object": {
+        "schema": [
+          "main"
+        ],
+        "name": "sympy_version"
+      },
+      "notebook": "01_reservoir_storage.ipynb",
+      "runtime_revision": "v0.4.0",
+      "runtime_catalog_sha256": "6697e9670f64c3350cbfc6b25834e2ed49672182fcbf941a2166bd887daa3929"
+    }
+  ],
+  "issues": []
+}

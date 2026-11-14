@@ -1,0 +1,11 @@
+{
+  "repository": "Query-farm/vgi-sympy",
+  "title": "SymPy Symbolic Math",
+  "subtitle": "Simplify, factor, differentiate, integrate and solve symbolic math expressions.",
+  "worker_release": "v0.4.0",
+  "provenance": "Exact catalog tags from immutable released Python source; public tag verified",
+  "source_url": "https://github.com/Query-farm/vgi-sympy/blob/ecee7f4a272ba1a5d3d86f7e6090a03c89d46ab8/vgi_sympy/worker.py#L136",
+  "source_sha256": "cc92b00f09dc971819239f9e0cf1d4989957fd26b6d2893c6e899083544abedf",
+  "source_path": "vgi_sympy/worker.py",
+  "source_commit": "ecee7f4a272ba1a5d3d86f7e6090a03c89d46ab8"
+}

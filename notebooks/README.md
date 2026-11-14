@@ -10,7 +10,7 @@ visible SQL. Python presents its returned results; it does not import SymPy.
 and run all cells. The bootstrap installs only the base
 [shared notebook package v0.3.6](https://github.com/Query-farm/vgi-example-notebooks/tree/v0.3.6).
 It preserves compatible preinstalled plotting and Jupyter libraries. The shared
-package owns the [presentation standard](https://github.com/Query-farm/vgi-example-notebooks/blob/v0.3.6/docs/standard.md),
+package owns the [presentation standard](https://github.com/Query-farm/vgi-example-notebooks/blob/v0.3.8/docs/standard.md),
 canonical branding and execution tooling. Saved GitHub charts use linked SVG
 assets; fresh Jupyter and Colab runs display native SVG.
 
