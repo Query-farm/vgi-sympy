@@ -189,7 +189,7 @@ runs the `test/sql/*.test` files via
 
 ## Requirements
 
-- Python ≥ 3.13
+- Python ≥ 3.14
 - [SymPy](https://www.sympy.org/) (BSD-3-Clause), pyarrow, `vgi-python`
 - A DuckDB-compatible engine — [Haybarn](https://github.com/Query-farm-haybarn/haybarn)
   (`uvx haybarn-cli`) or stock DuckDB (`INSTALL vgi FROM community; LOAD vgi;`).

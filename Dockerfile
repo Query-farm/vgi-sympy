@@ -6,7 +6,7 @@
 # See docker-entrypoint.sh. Symbolic math runs fully locally (SymPy, pure Python);
 # the worker is keyless and stateless.
 # syntax=docker/dockerfile:1
-FROM python:3.13-slim
+FROM python:3.14-slim
 
 ARG VERSION=0.0.0
 ARG GIT_COMMIT=unknown
