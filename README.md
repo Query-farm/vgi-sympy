@@ -18,7 +18,7 @@ equality, all as plain SQL scalar functions, backed by
 
 ```sql
 INSTALL vgi FROM community; LOAD vgi;
-ATTACH 'sympy' (TYPE vgi, LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-sympy@v0.4.1 vgi-sympy-worker');
+ATTACH 'sympy' (TYPE vgi, LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-sympy@v0.5.0 vgi-sympy-worker');
 
 SELECT sympy.simplify('sin(x)**2 + cos(x)**2');      -- '1'
 SELECT sympy.expand('(x + 1)**2');                   -- 'x**2 + 2*x + 1'
@@ -38,6 +38,8 @@ and SymPy's canonical string output is stable, so the same input always gives
 the same answer. That determinism is what makes the functions testable from SQL
 (assert canonical forms, or use `symbolic_equal`).
 
+vgi-sympy 0.5.0 speaks VGI protocol 3.4, so it needs Haybarn 2.0.1 or newer (Haybarn 2.0.0 loads a 3.3 `vgi` extension that cannot attach it).
+
 ## Quick start
 
 The worker isn't on PyPI; [uv](https://docs.astral.sh/uv/) runs it straight from a tagged release on GitHub. `uvx` builds an isolated environment on the first ATTACH and reuses it afterwards:
@@ -46,7 +48,7 @@ The worker isn't on PyPI; [uv](https://docs.astral.sh/uv/) runs it straight from
 INSTALL vgi FROM community;
 LOAD vgi;
 
-ATTACH 'sympy' AS sympy (TYPE vgi, LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-sympy@v0.4.1 vgi-sympy-worker');
+ATTACH 'sympy' AS sympy (TYPE vgi, LOCATION 'uvx --from git+https://github.com/Query-farm/vgi-sympy@v0.5.0 vgi-sympy-worker');
 
 -- Simplify a Pythagorean trig identity to 1.
 SELECT sympy.main.simplify('sin(x)**2 + cos(x)**2');
@@ -64,7 +66,7 @@ FROM (VALUES ('x*exp(x)'), ('1/(1 + x**2)'), ('sin(x)**2'), ('log(x)')) AS t(int
 ORDER BY integrand;
 ```
 
-Change `@v0.4.1` to move to a newer release.
+Change `@v0.5.0` to move to a newer release.
 
 ### Other ways to run it
 
@@ -185,7 +187,7 @@ uv run --no-sync mypy vgi_sympy/           # type check
 run as a `uv` stdio subprocess (exactly how DuckDB drives it after `ATTACH`) and
 runs the `test/sql/*.test` files via
 [`haybarn-unittest`](https://github.com/Query-farm-haybarn/haybarn)
-(`uv tool install --prerelease allow 'haybarn-unittest>=2.0.0rc11,<2.1'`).
+(`uv tool install --prerelease allow 'haybarn-unittest>=2.0.1rc3,<2.1'`).
 
 ## Requirements
 
